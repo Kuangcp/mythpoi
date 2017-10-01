@@ -1,0 +1,17 @@
+# maven #
+target/
+*.log
+# IDEA #
+.idea/
+*.iml
+
+# eclipse #
+bin/
+.settings/
+.metadata/
+.classpath
+.project
+Servers/
+
+.gradle/
+
