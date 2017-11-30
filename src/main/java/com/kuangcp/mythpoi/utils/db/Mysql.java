@@ -1,9 +1,5 @@
 package com.kuangcp.mythpoi.utils.db;
 
-/**
- * Created by https://github.com/kuangcp on 17-10-1  上午10:34
- */
-
 import com.kuangcp.mythpoi.utils.config.Config;
 
 import java.sql.*;
@@ -14,6 +10,7 @@ import java.util.List;
  * 切记要导JAR驱动包，还有配置好URL
  * @author Myth on 2016年7月24日
  */
+
 public class Mysql{
     private static int count = 0;
     private PreparedStatement ps = null;
