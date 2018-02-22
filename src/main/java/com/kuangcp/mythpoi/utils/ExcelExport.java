@@ -37,11 +37,9 @@ public class ExcelExport {
             HSSFRow row = sheet.createRow(rowIndex + i);//创建所需的行数
             for (int j = 0; j < obj.length; j++) {
                 HSSFCell cell;   //设置单元格的数据类型
-
                 // 一行中的列数为0
                 if (j == 0) {
                     cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
-
                     // 这个代码什么意思, 减3?, 减去Sheet标题,列标题一共三行,需要脱离出来
                     cell.setCellValue(rowIndex + i - 3);
                     // System.out.println("增加"+(rowIndex+i));

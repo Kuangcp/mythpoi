@@ -1,18 +1,19 @@
 package com.kuangcp.mythpoi.utils;
 
+import com.kuangcp.mythpoi.utils.base.ExcelConfig;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Employee{
-//    @excelExportAnnotation(name = "姓名")
-    private String name;//姓名
-//    @excelExportAnnotation(name = "性别")
-    private String sex;//性别:男，女
-//    @excelExportAnnotation(name = "联系电话")
-    private String phone;//联系电话
-//    @excelExportAnnotation(name = "QQ号码")
-    private String QQ;//QQ号码
+    @ExcelConfig(name = "姓名")
+    private String name;
+    @ExcelConfig(name = "性别")
+    private String sex;
+    @ExcelConfig(name = "联系电话")
+    private String phone;
+    @ExcelConfig(name = "QQ号码")
+    private String QQ;
 
     //导出的Excel的表的标题及文件名
     public String exportExcelTitle() {
