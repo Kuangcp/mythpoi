@@ -22,4 +22,12 @@ public class ConfigUtilTest {
             System.out.println(entry.getKey() + " | " + entry.getValue());
         }
     }
+
+    @Test
+    public void testgetFieldAnnotationMap(){
+        Map<String, String> result = configUtil.getFieldAnnotationMap(Employee.class, ExcelConfig.class);
+        for(Map.Entry<String, String> entry:result.entrySet()){
+            System.out.println(entry.getKey() + " | " + entry.getValue());
+        }
+    }
 }
