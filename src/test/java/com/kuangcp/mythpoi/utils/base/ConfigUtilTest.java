@@ -37,7 +37,7 @@ public class ConfigUtilTest {
     public void testTransform() throws Exception {
         Employee e1 = new Employee();
         e1.setQQ("QQ1");
-        e1.setName("Name1");
+        e1.setNames("Name1");
         e1.setPhone("Phone1");
 //        e1.setSex("sex1");
         e1.setEmail("email");

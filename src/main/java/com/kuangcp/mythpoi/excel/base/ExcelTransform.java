@@ -9,7 +9,7 @@ public interface ExcelTransform {
 
     /**
      * 获取Excel需要导出的标题
-     * @return
      */
-    String getExcelTitle();
+    String getExcelExportTitle();
+    String getExcelImportTitle();
 }

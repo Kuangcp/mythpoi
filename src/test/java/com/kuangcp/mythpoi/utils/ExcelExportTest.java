@@ -1,8 +1,6 @@
 package com.kuangcp.mythpoi.utils;
 
-import com.kuangcp.mythpoi.utils.base.ConfigUtil;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.junit.Assert;
+import com.kuangcp.mythpoi.excel.ExcelExport;
 import org.junit.Test;
 
 import java.io.File;
@@ -10,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,42 +30,45 @@ public class ExcelExportTest {
 
         Employee e1 = new Employee();
         e1.setQQ("QQ1");
-        e1.setName("Name1");
+        e1.setNames("Name1");
         e1.setPhone("Phone1");
         e1.setSex("sex1");
         e1.setEmail("email");
 
         Employee e2 = new Employee();
-        e2.setName("name2");
+        e2.setNames("name2");
         e2.setPhone("phone2");
         e2.setSex("sex2");
         e2.setQQ("QQ2");
+        Employee e3 = new Employee();
+        e3.setNames("name2");
+        e3.setPhone("phone2");
+        e3.setSex("sex2");
+        e3.setQQ("QQ2");
         List<Employee> originList = new ArrayList<>(0);
         originList.add(e1);
         originList.add(e2);
-        List<String[]> result = ConfigUtil.getContentByList(Employee.class, originList);
+        originList.add(e3);
 
-        try {
-            ExcelExport.export(out,originList.get(0).getExcelTitle(), result);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        List<String[]> result = ConfigUtil.getContentByList(Employee.class, originList);
+//        for(String [] temp: result){
+//            for(String l : temp){
+//                System.out.println(l);
+//            }
+//        }
+
+        ExcelExport.export(out,originList.get(0).getExcelExportTitle(), originList, Employee.class);
         System.out.println("ok");
     }
-    @Test
-    public void testAddRows() throws Exception {
-        int result = ExcelExport.addRows(null, null, 0, null);
-        Assert.assertEquals(0, result);
-    }
+//    @Test
+//    public void testAddRows() throws Exception {
+//        int result = ExcelExport.addRows(null, null, 0, null);
+//        Assert.assertEquals(0, result);
+//    }
 
-    @Test
-    public void testExport() throws Exception {
-        ExcelExport.export(null, "title", null);
-    }
-
-    @Test
-    public void testCreateSheet() throws Exception {
-        HSSFSheet result = ExcelExport.createSheet(null, "sheetTitle", "tableTitle", new String[]{"columnTitle"}, Integer.valueOf(0));
-        Assert.assertEquals(null, result);
-    }
+//    @Test
+//    public void testCreateSheet() throws Exception {
+//        HSSFSheet result = ExcelExport.createSheet(null, "sheetTitle", "tableTitle", new String[]{"columnTitle"}, Integer.valueOf(0));
+//        Assert.assertEquals(null, result);
+//    }
 }

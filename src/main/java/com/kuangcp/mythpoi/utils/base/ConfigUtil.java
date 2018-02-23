@@ -34,9 +34,7 @@ public class ConfigUtil {
         for (Field field : fields) {
             if (field.isAnnotationPresent(ExcelConfig.class)) {
                 ExcelConfig excelConfig = field.getAnnotation(ExcelConfig.class);
-                if (excelConfig.exportFlag()) {
-                    list.add(new ExcelCellMeta(field, excelConfig.name()));
-                }
+                if (excelConfig.exportFlag()) {list.add(new ExcelCellMeta(field, excelConfig.name()));}
             }
         }
         return list;
@@ -48,6 +46,7 @@ public class ConfigUtil {
             String[] line = new String[metaData.size()];
             int index = 0;
             for (ExcelCellMeta meta : metaData) {
+//                Object result = meta.getField().get(model); //这样是要public修饰才行
                 PropertyDescriptor propertyDescriptor = new PropertyDescriptor(meta.getField().getName(), target);
                 Method method = propertyDescriptor.getReadMethod(); //就是得到了属性的get方法
                 Object result = method.invoke(model);
