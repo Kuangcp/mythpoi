@@ -1,5 +1,6 @@
 package com.kuangcp.mythpoi.utils;
 
+import com.kuangcp.mythpoi.utils.base.ConfigUtil;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,7 +21,7 @@ import java.util.List;
 public class ExcelExportTest {
 
     @Test
-    public void testExports(){
+    public void testExports() throws Exception {
         File f= new File("/home/kcp/test/employee.xls") ; // 声明File对象
         // 第2步、通过子类实例化父类对象
         OutputStream out = null ; // 准备好一个输出的对象
@@ -30,11 +31,25 @@ public class ExcelExportTest {
             e11.printStackTrace();
         }
 
-        List<String[]> list = new ArrayList<>();
-        list.add(new String[]{"2", "2"});
+        Employee e1 = new Employee();
+        e1.setQQ("QQ1");
+        e1.setName("Name1");
+        e1.setPhone("Phone1");
+        e1.setSex("sex1");
+        e1.setEmail("email");
+
+        Employee e2 = new Employee();
+        e2.setName("name2");
+        e2.setPhone("phone2");
+        e2.setSex("sex2");
+        e2.setQQ("QQ2");
+        List<Employee> originList = new ArrayList<>(0);
+        originList.add(e1);
+        originList.add(e2);
+        List<String[]> result = ConfigUtil.getContentByList(Employee.class, originList);
 
         try {
-            ExcelExport.export(out,"23232", list);
+            ExcelExport.export(out,originList.get(0).getExcelTitle(), result);
         } catch (Exception e) {
             e.printStackTrace();
         }

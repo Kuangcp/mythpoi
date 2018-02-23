@@ -83,15 +83,15 @@ public class ExcelExport {
 
         // 定义所需列数
         int columnNum = dataList.get(0).length;
-        HSSFRow rowRowName = sheet.createRow(2);                // 在索引2的位置创建行(最顶端的行开始的第二行)
+        HSSFRow rowRowName = sheet.createRow(2);// 在索引2的位置创建行(最顶端的行开始的第二行)
 
         // 将列头设置到sheet的单元格中
         for (int n = 0; n < columnNum; n++) {
-            HSSFCell cellRowName = rowRowName.createCell(n);               //创建列头对应个数的单元格
-            cellRowName.setCellType(HSSFCell.CELL_TYPE_STRING);             //设置列头单元格的数据类型
+            HSSFCell cellRowName = rowRowName.createCell(n);//创建列头对应个数的单元格
+            cellRowName.setCellType(HSSFCell.CELL_TYPE_STRING);//设置列头单元格的数据类型
             HSSFRichTextString text = new HSSFRichTextString(dataList.get(0)[n]);
-            cellRowName.setCellValue(text);                                 //设置列头单元格的值
-            cellRowName.setCellStyle(columnTopStyle);                       //设置列头单元格样式
+            cellRowName.setCellValue(text);//设置列头单元格的值
+            cellRowName.setCellStyle(columnTopStyle);//设置列头单元格样式
         }
 
         //将查询出的数据设置到sheet对应的单元格中

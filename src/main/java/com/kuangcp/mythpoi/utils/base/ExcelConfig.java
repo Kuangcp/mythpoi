@@ -15,4 +15,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface ExcelConfig {
     String name();
+    // 是否需要导出, 默认是导出true
+    boolean exportFlag() default true;
 }
