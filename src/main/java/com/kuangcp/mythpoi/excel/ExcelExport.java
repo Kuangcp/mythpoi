@@ -12,44 +12,10 @@ import java.util.List;
 
 /**
  * Created by https://github.com/kuangcp on 18-2-21  下午12:47
- * Excel导出类
+ * Excel导出工具类
  * @author kuangcp
  */
 public class ExcelExport {
-//    /**
-//     * 在指定的sheet中在指定位置追加一些行
-//     * @param workbook 工作簿
-//     * @param sheet sheet
-//     * @param rowIndex 起始行标?
-//     * @param dataList List<String[]> 二维数据
-//     * @return int 添加的行数
-//     */
-//    public static int addRows(HSSFWorkbook workbook, HSSFSheet sheet, int rowIndex, List<String[]> dataList) {
-//        HSSFCellStyle style = getStyle(workbook);
-////        int columnNum = dataList.get(0).length;
-//        //将查询出的数据设置到sheet对应的单元格中
-//        int i = 0;
-//        for (; i < dataList.size(); i++) {
-//            String[] obj = dataList.get(i);//遍历每个对象
-//            HSSFRow row = sheet.createRow(rowIndex + i);//创建所需的行数
-//            for (int j = 0; j < obj.length; j++) {
-//                HSSFCell cell;   //设置单元格的数据类型
-//                // 一行中的列数为0
-//                if (j == 0) {
-//                    cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
-//                    // 这个代码什么意思, 减3?, 减去Sheet标题,列标题一共三行,需要脱离出来
-//                    cell.setCellValue(rowIndex + i - 3);
-//                } else {
-//                    cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
-//                    cell.setCellValue(obj[j]);//设置单元格的值
-//                }
-//                cell.setCellStyle(style);//设置单元格样式
-//            }
-//        }
-//        rowIndex = rowIndex + i;
-//        return rowIndex;
-//    }
-
     /**
      * @param out 输出流
      * @param sheetTitle Sheet标题
@@ -61,17 +27,16 @@ public class ExcelExport {
         List<String[]> dataList = ConfigUtil.getContentByList(target, originData);
         // 得到元数据
         List<ExcelCellMeta> metaList = ConfigUtil.getCellMetaData(target);
-        HSSFWorkbook workbook = new HSSFWorkbook();// 创建工作簿对象
-        HSSFSheet sheet = workbook.createSheet(sheetTitle);// 创建工作表
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet(sheetTitle);
 
         // 产生表格标题行
         HSSFRow rowm = sheet.createRow(0);
         HSSFCell cellTiltle = rowm.createCell(0);
 
         //sheet样式定义【getColumnTopStyle()/getStyle()均为自定义方法 - 在下面  - 可扩展】
-        HSSFCellStyle columnTopStyle = getColumnTopStyle(workbook);//获取列头样式对象
-        HSSFCellStyle style = getStyle(workbook);//单元格样式对象
-
+        HSSFCellStyle columnTopStyle = getColumnTopStyle(workbook);
+        HSSFCellStyle style = getStyle(workbook);
         sheet.addMergedRegion(new CellRangeAddress(0, 1, 0, (dataList.get(0).length - 1)));
         cellTiltle.setCellStyle(columnTopStyle);
         cellTiltle.setCellValue(sheetTitle);
@@ -124,7 +89,6 @@ public class ExcelExport {
         style.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
         style.setTopBorderColor(HSSFColor.BLACK.index);
 
-        //在样式用应用设置的字体;
         style.setFont(font);
         //设置自动换行;
         style.setWrapText(false);
@@ -155,7 +119,6 @@ public class ExcelExport {
         style.setBorderTop(HSSFCellStyle.BORDER_THIN);
         style.setTopBorderColor(HSSFColor.BLACK.index);
 
-        //在样式用应用设置的字体;
         style.setFont(font);
         //设置自动换行;
         style.setWrapText(false);
@@ -165,62 +128,37 @@ public class ExcelExport {
         style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
         return style;
     }
-
-//    /**
-//     * 创建sheet
+    //    /**
+//     * 在指定的sheet中在指定位置追加一些行
 //     * @param workbook 工作簿
-//     * @param sheetTitle 表标题
-//     * @param tableTitle sheet标题
-//     * @param columnTitle 列标题
-//     * @param year 年
+//     * @param sheet sheet
+//     * @param rowIndex 起始行标?
+//     * @param dataList List<String[]> 二维数据
+//     * @return int 添加的行数
 //     */
-//    public static HSSFSheet createSheet(HSSFWorkbook workbook, String sheetTitle, String tableTitle, String[] columnTitle, Integer year){
-//        // 创建工作簿对象
-//        HSSFSheet sheet = workbook.createSheet(sheetTitle);                  // 创建工作表
-//
-//        // 产生表格标题行
-//        HSSFRow rowm = sheet.createRow(0);
-//        HSSFCell cellTiltle = rowm.createCell(0);
-//
-//        //sheet样式定义【getColumnTopStyle()/getStyle()均为自定义方法 - 在下面  - 可扩展】
-//        HSSFCellStyle columnTopStyle = getColumnTopStyle(workbook);//获取列头样式对象
-//        HSSFCellStyle style = getStyle(workbook);                  //单元格样式对象
-//
-//        sheet.addMergedRegion(new CellRangeAddress(0, 1, 0, (columnTitle.length - 1)));
-//        cellTiltle.setCellStyle(columnTopStyle);
-//        cellTiltle.setCellValue(tableTitle);  //单元表格的标题
-//
-//        // 定义所需列数
-//        int columnNum = columnTitle.length;
-//        HSSFRow rowRowName = sheet.createRow(2);
-//        for (int n = 0; n < columnNum; n++) {
-//            HSSFCell cellRowName = rowRowName.createCell(n);               //创建列头对应个数的单元格
-//            cellRowName.setCellType(HSSFCell.CELL_TYPE_STRING); //设置列头单元格的数据类型
-//            HSSFRichTextString text = null;
-//            if (n == 0) {
-//                text = new HSSFRichTextString("登记部门:外语学院 ");
-//                cellRowName.setCellValue(text);                                 //设置列头单元格的值
-//                //cellRowName.setCellStyle(columnTopStyle);
-//            } else if (n == columnNum - 2) {
-//                text = new HSSFRichTextString("年度： " + year);
-//                cellRowName.setCellValue(text);                                 //设置列头单元格的值
-//                //cellRowName.setCellStyle(columnTopStyle);
-//            } else {
-//
+//    public static int addRows(HSSFWorkbook workbook, HSSFSheet sheet, int rowIndex, List<String[]> dataList) {
+//        HSSFCellStyle style = getStyle(workbook);
+////        int columnNum = dataList.get(0).length;
+//        //将查询出的数据设置到sheet对应的单元格中
+//        int i = 0;
+//        for (; i < dataList.size(); i++) {
+//            String[] obj = dataList.get(i);//遍历每个对象
+//            HSSFRow row = sheet.createRow(rowIndex + i);//创建所需的行数
+//            for (int j = 0; j < obj.length; j++) {
+//                HSSFCell cell;   //设置单元格的数据类型
+//                // 一行中的列数为0
+//                if (j == 0) {
+//                    cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
+//                    // 这个代码什么意思, 减3?, 减去Sheet标题,列标题一共三行,需要脱离出来
+//                    cell.setCellValue(rowIndex + i - 3);
+//                } else {
+//                    cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
+//                    cell.setCellValue(obj[j]);//设置单元格的值
+//                }
+//                cell.setCellStyle(style);//设置单元格样式
 //            }
-//            //设置列头单元格样式
 //        }
-//        rowRowName = sheet.createRow(3);// 在索引2的位置创建行(最顶端的行开始的第二行)
-//
-//        // 将列头设置到sheet的单元格中
-//        for (int n = 0; n < columnNum; n++) {
-//            HSSFCell cellRowName = rowRowName.createCell(n);               //创建列头对应个数的单元格
-//            cellRowName.setCellType(HSSFCell.CELL_TYPE_STRING);             //设置列头单元格的数据类型
-//            HSSFRichTextString text = new HSSFRichTextString(columnTitle[n]);
-//            cellRowName.setCellValue(text);                                 //设置列头单元格的值
-//            cellRowName.setCellStyle(columnTopStyle);                       //设置列头单元格样式
-//        }
-//        return sheet;
+//        rowIndex = rowIndex + i;
+//        return rowIndex;
 //    }
-
 }

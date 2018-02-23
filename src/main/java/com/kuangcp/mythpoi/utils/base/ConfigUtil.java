@@ -48,7 +48,8 @@ public class ConfigUtil {
             for (ExcelCellMeta meta : metaData) {
 //                Object result = meta.getField().get(model); //这样是要public修饰才行
                 PropertyDescriptor propertyDescriptor = new PropertyDescriptor(meta.getField().getName(), target);
-                Method method = propertyDescriptor.getReadMethod(); //就是得到了属性的get方法
+                //就是得到了属性的get方法
+                Method method = propertyDescriptor.getReadMethod();
                 Object result = method.invoke(model);
                 if(result == null){
                     line[index] = "";
