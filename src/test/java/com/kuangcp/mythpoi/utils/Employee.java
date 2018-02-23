@@ -15,6 +15,8 @@ public class Employee implements ExcelTransform{
     @ExcelConfig(name = "QQ号码")
     private String QQ;
 
+    private String s = "";
+
     private String email;
 
     @Override
