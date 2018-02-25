@@ -1,7 +1,7 @@
 package com.kuangcp.mythpoi.excel;
 
 import com.kuangcp.mythpoi.excel.base.ExcelTransform;
-import com.kuangcp.mythpoi.utils.base.ConfigUtil;
+import com.kuangcp.mythpoi.utils.base.ReadAnnotationUtil;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -22,11 +22,11 @@ public class ExcelExport {
      * @param originData 原始对象集合
      * @param target Excel对应的类对象
      */
-    public static void export(OutputStream out, String sheetTitle, List<? extends ExcelTransform> originData,
+    public static void exportExcel(OutputStream out, String sheetTitle, List<? extends ExcelTransform> originData,
                               Class target) throws Exception {
-        List<String[]> dataList = ConfigUtil.getContentByList(target, originData);
+        List<String[]> dataList = ReadAnnotationUtil.getContentByList(target, originData);
         // 得到元数据
-        List<ExcelCellMeta> metaList = ConfigUtil.getCellMetaData(target);
+        List<ExcelCellMeta> metaList = ReadAnnotationUtil.getCellMetaData(target);
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet(sheetTitle);
 

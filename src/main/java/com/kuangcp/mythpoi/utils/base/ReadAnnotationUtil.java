@@ -15,18 +15,18 @@ import java.util.List;
  *
  * @author kuangcp
  */
-public class ConfigUtil {
+public class ReadAnnotationUtil {
     /**
      * @param target 目标类
      * @param originData 原始对象集合
-     * @return List String [] 二维数据
+     * @return List String [] 二维数据 也就是Excel的内容
      */
     public static List<String[]> getContentByList(Class target, List<? extends ExcelTransform> originData) throws Exception {
         return getContentByMeta(target, getCellMetaData(target), originData);
     }
 
     /**
-     * 获取具有注解的属性,封装成list
+     * 获取具有注解的属性,封装成list, 也就是Excel的标题行
      */
     public static List<ExcelCellMeta> getCellMetaData(Class target) {
         List<ExcelCellMeta> list = new ArrayList<>(0);

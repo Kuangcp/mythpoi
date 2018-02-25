@@ -52,14 +52,14 @@ public class ExcelExportTest {
         originList.add(e2);
         originList.add(e3);
 
-//        List<String[]> result = ConfigUtil.getContentByList(Employee.class, originList);
+//        List<String[]> result = ReadAnnotationUtil.getContentByList(Employee.class, originList);
 //        for(String [] temp: result){
 //            for(String l : temp){
 //                System.out.println(l);
 //            }
 //        }
 
-        ExcelExport.export(out, Employee.EXPORT_TITLE, originList, Employee.class);
+        ExcelExport.exportExcel(out, Employee.EXPORT_TITLE, originList, Employee.class);
         System.out.println("ok");
     }
 //    @Test
