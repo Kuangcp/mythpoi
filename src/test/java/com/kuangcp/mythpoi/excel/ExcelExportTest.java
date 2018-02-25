@@ -1,6 +1,7 @@
 package com.kuangcp.mythpoi.excel;
 
 import com.kuangcp.mythpoi.excel.ExcelExport;
+import com.kuangcp.mythpoi.excel.base.ExcelTransform;
 import com.kuangcp.mythpoi.utils.Employee;
 import org.junit.Test;
 
@@ -58,7 +59,7 @@ public class ExcelExportTest {
 //            }
 //        }
 
-        ExcelExport.export(out,originList.get(0).getExcelExportTitle(), originList, Employee.class);
+        ExcelExport.export(out, Employee.EXPORT_TITLE, originList, Employee.class);
         System.out.println("ok");
     }
 //    @Test

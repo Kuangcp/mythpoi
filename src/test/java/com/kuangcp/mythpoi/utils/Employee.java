@@ -6,6 +6,10 @@ import lombok.Data;
 
 @Data
 public class Employee implements ExcelTransform{
+
+    public static String EXPORT_TITLE="雇员表";
+    public static String IMPORT_TITLE="雇员表";
+
     @ExcelConfig(name = "姓名")
     private String names;
     @ExcelConfig(name = "性别")
@@ -15,17 +19,6 @@ public class Employee implements ExcelTransform{
     @ExcelConfig(name = "QQ号码")
     private String QQ;
 
-    private String s = "";
-
     private String email;
 
-    @Override
-    public String getExcelExportTitle() {
-        return "雇员表";
-    }
-
-    @Override
-    public String getExcelImportTitle() {
-        return "雇员表";
-    }
 }

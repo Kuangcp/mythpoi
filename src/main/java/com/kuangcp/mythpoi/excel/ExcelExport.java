@@ -43,25 +43,29 @@ public class ExcelExport {
 
         // 定义所需列数
         int columnNum = dataList.get(0).length;
-        HSSFRow rowRowName = sheet.createRow(2);// 在索引2的位置创建行(最顶端的行开始的第二行)
+        // 在索引2的位置创建行(最顶端的行开始的第二行)
+        HSSFRow rowRowName = sheet.createRow(2);
 
         // 设置sheet的列头
         for (int n = 0; n < columnNum; n++) {
-            HSSFCell cellRowName = rowRowName.createCell(n);//创建列头对应个数的单元格
-            cellRowName.setCellType(HSSFCell.CELL_TYPE_STRING);//设置列头单元格的数据类型
+            //创建列头对应个数的单元格
+            HSSFCell cellRowName = rowRowName.createCell(n);
+            //设置列头单元格的数据类型
+            cellRowName.setCellType(HSSFCell.CELL_TYPE_STRING);
             HSSFRichTextString text = new HSSFRichTextString(metaList.get(n).getTitle());
-            cellRowName.setCellValue(text);//设置列头单元格的值
-            cellRowName.setCellStyle(columnTopStyle);//设置列头单元格样式
+            cellRowName.setCellValue(text);
+            cellRowName.setCellStyle(columnTopStyle);
         }
 
         // 填充sheet内容
         for (int m = 0; m < dataList.size(); m++) {
-            String[] obj = dataList.get(m);//遍历每个对象
-            HSSFRow row = sheet.createRow(m + 3);//创建所需的行数
+            String[] obj = dataList.get(m);
+            //创建所需的行数
+            HSSFRow row = sheet.createRow(m + 3);
             for (int j = 0; j < obj.length; j++) {
                 HSSFCell cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
-                cell.setCellValue(obj[j]);//设置单元格的值
-                cell.setCellStyle(style);//设置单元格样式
+                cell.setCellValue(obj[j]);
+                cell.setCellStyle(style);
             }
         }
         try {
@@ -82,8 +86,6 @@ public class ExcelExport {
         HSSFCellStyle style = workbook.createCellStyle();
         style.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
         style.setBottomBorderColor(HSSFColor.BLACK.index);
-//        style.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
-//        style.setLeftBorderColor(HSSFColor.BLACK.index);
         style.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
         style.setRightBorderColor(HSSFColor.BLACK.index);
         style.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
@@ -112,8 +114,6 @@ public class ExcelExport {
         // 设置边框风格和颜色
         style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
         style.setBottomBorderColor(HSSFColor.BLACK.index);
-//        style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-//        style.setLeftBorderColor(HSSFColor.BLACK.index);
         style.setBorderRight(HSSFCellStyle.BORDER_THIN);
         style.setRightBorderColor(HSSFColor.BLACK.index);
         style.setBorderTop(HSSFCellStyle.BORDER_THIN);

@@ -8,8 +8,8 @@ package com.kuangcp.mythpoi.excel.base;
 public interface ExcelTransform {
 
     /**
-     * 获取Excel需要导出的标题
+     * 获取Excel需要导入导出的标题,一定要重写
      */
-    String getExcelExportTitle();
-    String getExcelImportTitle();
+    String EXPORT_TITLE = " ";
+    String IMPORT_TITLE = " ";
 }

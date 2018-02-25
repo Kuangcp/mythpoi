@@ -12,7 +12,9 @@ public class Config {
 
     private Properties cfg = new Properties();
 
-    // maven 结构 resources下的a.yml : /a.yml
+    /**
+     * maven 结构 resources下的a.yml : /a.yml
+     */
     public Config(String path) {
         try {
             InputStream is = this.getClass().getResourceAsStream(path);
