@@ -1,6 +1,7 @@
 package com.kuangcp.mythpoi.excel;
 
 import com.kuangcp.mythpoi.excel.base.ExcelTransform;
+import com.kuangcp.mythpoi.excel.util.ExcelUtil;
 import com.kuangcp.mythpoi.utils.base.ReadAnnotationUtil;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -10,6 +11,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +23,7 @@ import java.util.List;
  *     通过属性对象进行设置值,将Excel的每一行转换成对象
  * 问题:
  * 一个Sheet对应一个类, 怎么处理多Sheet, 用Map?
+ * 为什么使用super关键字
  *
  * @author kuangcp
  */
@@ -33,7 +36,7 @@ public class ExcelImport {
      * @param target 对象集合
      * @return List集合, 否则返回Null
      */
-    public List<? extends ExcelTransform> importExcel(String filePath, Class target) {
+    public List<? super ExcelTransform> importExcel(String filePath, Class target) {
         return importExcel(filePath, target, 0);
     }
 
@@ -43,7 +46,7 @@ public class ExcelImport {
      * @param target 实体类
      * @return List集合, 或者Null
      */
-    public List<? extends ExcelTransform> importExcel(FileInputStream input, Class target) {
+    public List<? super ExcelTransform> importExcel(FileInputStream input, Class target) {
         return importExcel(input, target, 0);
     }
 
@@ -54,7 +57,7 @@ public class ExcelImport {
      * @param sheetNum Sheet标号 0开始
      * @return List集合, 否则返回Null
      */
-    public List<? extends ExcelTransform> importExcel(String filePath, Class target, int sheetNum) {
+    public List<? super ExcelTransform> importExcel(String filePath, Class target, int sheetNum) {
         FileInputStream inputStream;
         try {
             inputStream = new FileInputStream(filePath);
@@ -72,7 +75,7 @@ public class ExcelImport {
      * @param sheetNum Sheet标号 0开始
      * @return List集合, 或者Null
      */
-    public List<? extends ExcelTransform> importExcel(FileInputStream input, Class target, int sheetNum) {
+    public List<? super ExcelTransform> importExcel(FileInputStream input, Class target, int sheetNum) {
         try {
             POIFSFileSystem fs = new POIFSFileSystem(input);
             wb = new HSSFWorkbook(fs);
@@ -89,9 +92,10 @@ public class ExcelImport {
      * 根据sheetNum读取数据
      * @param sheetNum sheet标号 0开始
      * @return 数据集合对象
+     * TODO 为什么要用super关键字而不是extends关键字???
      */
-    private List readExcelSheet(int sheetNum, Class<? extends ExcelTransform> target) {
-        List result = new ArrayList<>(0);
+    private List<? super ExcelTransform> readExcelSheet(int sheetNum, Class<? extends ExcelTransform> target) {
+        List<? super ExcelTransform> result = new ArrayList<>(0);
         List<ExcelCellMeta> metaList = ReadAnnotationUtil.getCellMetaData(target);
         HSSFSheet sheet = wb.getSheetAt(sheetNum);
         int rowNum = sheet.getLastRowNum();
@@ -101,18 +105,17 @@ public class ExcelImport {
         System.out.println("得到行"+rowNum+"列"+colNum);
         String[] titleList = new String[colNum];
 
-        for(int i=0; i<colNum;i++){
+        // 将属性和Excel列标题对应起来,这样的写法就能够保证Excel的列顺序混乱也不影响导入
+        for(int i=0; i<colNum; i++){
             String temp = row.getCell(i).getStringCellValue();
             for(ExcelCellMeta meta : metaList){
-                if(meta.getTitle().equals(temp)){
-                    titleList[i] = temp;
-//                    System.out.println(temp+"|"+meta.getField());
-                }
+                if(meta.getTitle().equals(temp)){titleList[i] = temp;}
             }
         }
 
         for (int j = 3; j <= rowNum; j++) {
             row = sheet.getRow(j);
+            // TODO 思考:既然是自己和子类,为什么要用super关键字
             ExcelTransform obj = null;
             try {
                 obj = target.newInstance();
@@ -121,24 +124,16 @@ public class ExcelImport {
             }
             for (int i = 0; i < colNum; i++) {
                 String temp = row.getCell(i).getStringCellValue();
-                for(ExcelCellMeta meta : metaList){
-                    if(meta.getTitle().equals(titleList[i])){
-                        meta.getField().setAccessible(true);
-                        try {
-                            meta.getField().set(obj, temp);
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                Field colField = ExcelUtil.getOneByTitle(metaList, titleList[i]);
+                colField.setAccessible(true);
+                try {
+                    colField.set(obj, temp);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
                 }
             }
             result.add(obj);
         }
-
-//        for (String s : titleList) {
-//            System.out.println(s);
-//        }
-        result.forEach(item -> System.out.println(item.toString()));
-        return null;
+        return result;
     }
 }
