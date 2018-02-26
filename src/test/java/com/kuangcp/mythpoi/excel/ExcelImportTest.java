@@ -4,7 +4,10 @@ import com.kuangcp.mythpoi.excel.base.ExcelTransform;
 import com.kuangcp.mythpoi.utils.Employee;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by https://github.com/kuangcp on 18-2-23  下午9:54
@@ -26,6 +29,8 @@ public class ExcelImportTest {
 //            System.out.print(e.getQQ());
 //            System.out.println("<<<<<");
         });
+
+        Map<String, String> list = new HashMap<String, String>(0){};
     }
 }
 

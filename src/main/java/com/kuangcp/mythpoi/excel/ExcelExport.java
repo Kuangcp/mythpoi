@@ -1,5 +1,6 @@
 package com.kuangcp.mythpoi.excel;
 
+import com.kuangcp.mythpoi.excel.base.BaseConfig;
 import com.kuangcp.mythpoi.excel.base.ExcelTransform;
 import com.kuangcp.mythpoi.utils.base.ReadAnnotationUtil;
 import org.apache.poi.hssf.usermodel.*;
@@ -9,6 +10,8 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+
+//import static com.kuangcp.mythpoi.excel.base.BaseConfig.*;
 
 /**
  * Created by https://github.com/kuangcp on 18-2-21  下午12:47
@@ -31,20 +34,21 @@ public class ExcelExport {
         HSSFSheet sheet = workbook.createSheet(sheetTitle);
 
         // 产生表格标题行
-        HSSFRow rowm = sheet.createRow(0);
-        HSSFCell cellTiltle = rowm.createCell(0);
+        HSSFRow row = sheet.createRow(startRowNum);
+        HSSFCell cellTitle = row.createCell(startColNum);
 
         //sheet样式定义【getColumnTopStyle()/getStyle()均为自定义方法 - 在下面  - 可扩展】
         HSSFCellStyle columnTopStyle = getColumnTopStyle(workbook);
         HSSFCellStyle style = getStyle(workbook);
-        sheet.addMergedRegion(new CellRangeAddress(0, 1, 0, (dataList.get(0).length - 1)));
-        cellTiltle.setCellStyle(columnTopStyle);
-        cellTiltle.setCellValue(sheetTitle);
+        // 合并单元格
+        sheet.addMergedRegion(new CellRangeAddress(startRowNum, titleRowEndNum, startColNum, dataList.get(0).length - 1));
+        cellTitle.setCellStyle(columnTopStyle);
+        cellTitle.setCellValue(sheetTitle);
 
         // 定义所需列数
-        int columnNum = dataList.get(0).length;
+        int columnNum = dataList.get(startRowNum).length;
         // 在索引2的位置创建行(最顶端的行开始的第二行)
-        HSSFRow rowRowName = sheet.createRow(2);
+        HSSFRow rowRowName = sheet.createRow(titleTotalNum);
 
         // 设置sheet的列头
         for (int n = 0; n < columnNum; n++) {
@@ -61,7 +65,7 @@ public class ExcelExport {
         for (int m = 0; m < dataList.size(); m++) {
             String[] obj = dataList.get(m);
             //创建所需的行数
-            HSSFRow row = sheet.createRow(m + 3);
+            row = sheet.createRow(m + contentStartNum);
             for (int j = 0; j < obj.length; j++) {
                 HSSFCell cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
                 cell.setCellValue(obj[j]);
