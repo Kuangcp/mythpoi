@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 
 /**
  * Created by https://github.com/kuangcp on 18-2-27  下午3:37
- *
+ * Yaml的读写工具类
  * @author kuangcp
  */
 public class YamlUtil {

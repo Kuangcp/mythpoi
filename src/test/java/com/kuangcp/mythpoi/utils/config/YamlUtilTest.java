@@ -1,23 +1,12 @@
 package com.kuangcp.mythpoi.utils.config;
 
-import com.kuangcp.mythpoi.excel.base.BaseConfig;
 import com.kuangcp.mythpoi.excel.base.MainConfig;
-import org.ho.yaml.Yaml;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import sun.applet.Main;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by https://github.com/kuangcp on 18-2-27  下午4:10
- *
+ * yml 配置文件的读写
  * @author kuangcp
  */
 public class YamlUtilTest {
@@ -28,7 +17,7 @@ public class YamlUtilTest {
         MainConfig config = MainConfig.getInstance();
         config.setContentStartNum(11);
         config.setStartColNum(1);
-        config.setTitleRowEndNum(3);
+        config.setTitleTotalNum(3);
         config.setStartRowNum(1);
 //        MainConfig config1 = MainConfig.getInstance();
 //        config1.setContentStartNum(11);

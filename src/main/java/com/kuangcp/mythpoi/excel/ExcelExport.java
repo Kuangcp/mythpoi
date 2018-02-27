@@ -1,9 +1,7 @@
 package com.kuangcp.mythpoi.excel;
 
-import com.kuangcp.mythpoi.excel.base.BaseConfig;
 import com.kuangcp.mythpoi.excel.base.ExcelTransform;
 import com.kuangcp.mythpoi.excel.base.MainConfig;
-import com.kuangcp.mythpoi.utils.base.ExcelConfig;
 import com.kuangcp.mythpoi.utils.base.ReadAnnotationUtil;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
@@ -12,8 +10,6 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
-
-//import static com.kuangcp.mythpoi.excel.base.BaseConfig.*;
 
 /**
  * Created by https://github.com/kuangcp on 18-2-21  下午12:47
@@ -44,7 +40,7 @@ public class ExcelExport {
         HSSFCellStyle columnTopStyle = getColumnTopStyle(workbook);
         HSSFCellStyle style = getStyle(workbook);
         // 合并单元格
-        sheet.addMergedRegion(new CellRangeAddress(mainConfig.getStartRowNum(), mainConfig.getTitleRowEndNum(),
+        sheet.addMergedRegion(new CellRangeAddress(mainConfig.getStartRowNum(), mainConfig.getTitleTotalNum()-1,
                 mainConfig.getStartColNum(), dataList.get(0).length - 1));
         cellTitle.setCellStyle(columnTopStyle);
         cellTitle.setCellValue(sheetTitle);
