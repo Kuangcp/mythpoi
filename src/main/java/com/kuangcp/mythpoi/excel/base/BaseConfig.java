@@ -1,10 +1,13 @@
 package com.kuangcp.mythpoi.excel.base;
 
+import lombok.Data;
+
 /**
  * Created by https://github.com/kuangcp on 18-2-25  下午11:39
  * TODO 单例类,配置类
  * @author kuangcp
  */
+@Data
 public class BaseConfig {
     public int startColNum = 0;
     public int startRowNum = 0;

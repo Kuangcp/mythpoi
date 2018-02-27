@@ -8,14 +8,14 @@ import java.util.Properties;
  *
  * @author Myth By 2016年7月29日
  */
-public class Config {
+public class PropertiesUtil {
 
     private Properties cfg = new Properties();
 
     /**
      * maven 结构 resources下的a.yml : /a.yml
      */
-    public Config(String path) {
+    public PropertiesUtil(String path) {
         try {
             InputStream is = this.getClass().getResourceAsStream(path);
             cfg.load(is);

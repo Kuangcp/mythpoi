@@ -2,6 +2,8 @@ package com.kuangcp.mythpoi.excel;
 
 import com.kuangcp.mythpoi.excel.base.BaseConfig;
 import com.kuangcp.mythpoi.excel.base.ExcelTransform;
+import com.kuangcp.mythpoi.excel.base.MainConfig;
+import com.kuangcp.mythpoi.utils.base.ExcelConfig;
 import com.kuangcp.mythpoi.utils.base.ReadAnnotationUtil;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
@@ -19,6 +21,7 @@ import java.util.List;
  * @author kuangcp
  */
 public class ExcelExport {
+    private static MainConfig mainConfig = MainConfig.getInstance();
     /**
      * @param out 输出流
      * @param sheetTitle Sheet标题
@@ -34,21 +37,22 @@ public class ExcelExport {
         HSSFSheet sheet = workbook.createSheet(sheetTitle);
 
         // 产生表格标题行
-        HSSFRow row = sheet.createRow(startRowNum);
-        HSSFCell cellTitle = row.createCell(startColNum);
+        HSSFRow row = sheet.createRow(mainConfig.getStartColNum());
+        HSSFCell cellTitle = row.createCell(mainConfig.getStartColNum());
 
         //sheet样式定义【getColumnTopStyle()/getStyle()均为自定义方法 - 在下面  - 可扩展】
         HSSFCellStyle columnTopStyle = getColumnTopStyle(workbook);
         HSSFCellStyle style = getStyle(workbook);
         // 合并单元格
-        sheet.addMergedRegion(new CellRangeAddress(startRowNum, titleRowEndNum, startColNum, dataList.get(0).length - 1));
+        sheet.addMergedRegion(new CellRangeAddress(mainConfig.getStartRowNum(), mainConfig.getTitleRowEndNum(),
+                mainConfig.getStartColNum(), dataList.get(0).length - 1));
         cellTitle.setCellStyle(columnTopStyle);
         cellTitle.setCellValue(sheetTitle);
 
         // 定义所需列数
-        int columnNum = dataList.get(startRowNum).length;
+        int columnNum = dataList.get(mainConfig.getStartRowNum()).length;
         // 在索引2的位置创建行(最顶端的行开始的第二行)
-        HSSFRow rowRowName = sheet.createRow(titleTotalNum);
+        HSSFRow rowRowName = sheet.createRow(mainConfig.getTitleTotalNum());
 
         // 设置sheet的列头
         for (int n = 0; n < columnNum; n++) {
@@ -65,7 +69,7 @@ public class ExcelExport {
         for (int m = 0; m < dataList.size(); m++) {
             String[] obj = dataList.get(m);
             //创建所需的行数
-            row = sheet.createRow(m + contentStartNum);
+            row = sheet.createRow(m + mainConfig.getContentStartNum());
             for (int j = 0; j < obj.length; j++) {
                 HSSFCell cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
                 cell.setCellValue(obj[j]);

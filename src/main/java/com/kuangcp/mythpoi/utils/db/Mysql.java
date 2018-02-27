@@ -1,6 +1,6 @@
 package com.kuangcp.mythpoi.utils.db;
 
-import com.kuangcp.mythpoi.utils.config.Config;
+import com.kuangcp.mythpoi.utils.config.PropertiesUtil;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class Mysql{
      * @param password 密码
      */
     public Mysql(String database,String port,String username,String password){
-        Config con = new Config("/mysql.properties");
+        PropertiesUtil con = new PropertiesUtil("/mysql.properties");
         this.Driver = con.getString("Driver");
         this.URL.append("jdbc:mysql://localhost:").append(port).append("/").append(database).append("?user=")
                 .append(username).append("&password=").append(password).append("&userUnicode=true&characterEncoding=UTF8");
@@ -37,7 +37,7 @@ public class Mysql{
      * 采用配置文件的默认配置
      */
     public Mysql(){
-        Config con = new Config("/mysql.properties");
+        PropertiesUtil con = new PropertiesUtil("/mysql.properties");
         this.Driver = con.getString("Driver");
         String database = con.getString("database");
         String username = con.getString("username");

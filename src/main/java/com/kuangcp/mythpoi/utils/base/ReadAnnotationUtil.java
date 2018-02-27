@@ -72,8 +72,8 @@ public class ReadAnnotationUtil {
 //        Map<String, String> result = new HashMap<>();
 //        final Field[] fields = target.getDeclaredFields();
 //        for (Field field : fields){
-//            if(field.isAnnotationPresent(ExcelConfig.class)){
-//                ExcelConfig excelConfig = field.getAnnotation(ExcelConfig.class);
+//            if(field.isAnnotationPresent(MainConfig.class)){
+//                MainConfig excelConfig = field.getAnnotation(MainConfig.class);
 //                if(excelConfig.exportFlag()){
 //                    result.put(field.getName(), excelConfig.name());
 //                }
