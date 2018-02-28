@@ -49,9 +49,9 @@ public class Employee implements ExcelTransform{
 
 **********
 - 2.Export Excel file  
-    - `ExcelExport.exportExcel("/home/kcp/test/employee.xls", Employee.EXPORT_TITLE, originList, Employee.class);`
+    - `ExcelExport.exportExcel("/home/kcp/test/employee.xls", originList);` `originList` is a Employee List   
 
 - 3.Import Excel file
-    - `List<? super ExcelTransform> result = ExcelImport.importExcel("/home/kcp/test/employee.xls", Employee.class);`
+    - `List<Employee> result = ExcelImport.importExcel("/home/kcp/test/employee.xls", Employee.class);`
     
 ### Word

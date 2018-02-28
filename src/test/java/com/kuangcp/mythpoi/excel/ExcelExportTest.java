@@ -1,6 +1,8 @@
 package com.kuangcp.mythpoi.excel;
 
 import com.kuangcp.mythpoi.utils.Employee;
+import com.kuangcp.mythpoi.utils.base.ReadAnnotationUtil;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -17,8 +19,10 @@ import java.util.List;
  */
 public class ExcelExportTest {
 
-    @Test
-    public void testExports() throws Exception {
+    private List<Employee> originList = new ArrayList<>(0);
+
+    @Before
+    public void init(){
         Employee e1 = new Employee();
         e1.setQQ("QQ1");
         e1.setNames("Name1");
@@ -38,19 +42,25 @@ public class ExcelExportTest {
         e3.setSex("sex2");
         e3.setQQ("QQ2");
 
-        List<Employee> originList = new ArrayList<>(0);
         originList.add(e1);
         originList.add(e2);
         originList.add(e3);
+    }
 
-//        List<String[]> result = ReadAnnotationUtil.getContentByList(Employee.class, originList);
-//        for(String [] temp: result){
-//            for(String l : temp){
-//                System.out.println(l);
-//            }
-//        }
-        Boolean results = ExcelExport.exportExcel("/home/kcp/test/employee.xls", originList, Employee.class);
+    @Test
+    public void testExports(){
+        Boolean results = ExcelExport.exportExcel("/home/kcp/test/employee.xls", originList);
         assert results;
+    }
+    @Test
+    public void testGetContentByList() throws Exception {
+        List<String[]> result = ReadAnnotationUtil.getContentByList(Employee.class, originList);
+        for(String [] temp: result){
+            for(String l : temp){
+                System.out.print(l);
+            }
+            System.out.println();
+        }
     }
 
 }

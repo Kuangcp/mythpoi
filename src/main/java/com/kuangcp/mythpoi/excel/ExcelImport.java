@@ -38,7 +38,7 @@ public class ExcelImport {
      * @param target 对象集合
      * @return List集合, 否则返回Null
      */
-    public static List<? super ExcelTransform> importExcel(String filePath, Class<? extends ExcelTransform> target) {
+    public static <T extends ExcelTransform> List<T> importExcel(String filePath, Class<T> target) {
         return importExcel(filePath, target, 0);
     }
 
@@ -48,7 +48,7 @@ public class ExcelImport {
      * @param target 实体类
      * @return List集合, 或者Null
      */
-    public static List<? super ExcelTransform> importExcel(FileInputStream input, Class<? extends ExcelTransform> target) {
+    public static <T extends ExcelTransform> List importExcel(FileInputStream input, Class<T> target) {
         return importExcel(input, target, 0);
     }
 
@@ -59,7 +59,7 @@ public class ExcelImport {
      * @param sheetNum Sheet标号 0开始
      * @return List集合, 否则返回Null
      */
-    public static List<? super ExcelTransform> importExcel(String filePath, Class<? extends ExcelTransform> target, int sheetNum) {
+    public static <T extends ExcelTransform> List<T> importExcel(String filePath, Class<T> target, int sheetNum) {
         FileInputStream inputStream;
         try {
             inputStream = new FileInputStream(filePath);
@@ -77,7 +77,7 @@ public class ExcelImport {
      * @param sheetNum Sheet标号 0开始
      * @return List集合, 或者Null
      */
-    public static List<? super ExcelTransform> importExcel(FileInputStream input, Class<? extends ExcelTransform> target, int sheetNum) {
+    public static <T extends ExcelTransform> List<T> importExcel(FileInputStream input, Class<T> target, int sheetNum) {
         try {
             POIFSFileSystem fs = new POIFSFileSystem(input);
             wb = new HSSFWorkbook(fs);
@@ -97,8 +97,8 @@ public class ExcelImport {
      * @return 数据集合对象
      * TODO 为什么要用super关键字而不是extends关键字???
      */
-    private static List<? super ExcelTransform> readExcelSheet(int sheetNum, Class<? extends ExcelTransform> target) {
-        List<ExcelTransform> result = new ArrayList<>(0);
+    private static <T extends ExcelTransform> List<T> readExcelSheet(int sheetNum, Class<T> target) {
+        List<T> result = new ArrayList<>(0);
         List<ExcelCellMeta> metaList = ReadAnnotationUtil.getCellMetaData(target);
         HSSFSheet sheet = wb.getSheetAt(sheetNum);
         int rowNum = sheet.getLastRowNum();
@@ -119,7 +119,7 @@ public class ExcelImport {
         for (int j = mainConfig.getContentStartNum(); j <= rowNum; j++) {
             row = sheet.getRow(j);
             // TODO 思考:既然是自己和子类,为什么要用super关键字
-            ExcelTransform obj = null;
+            T obj = null;
             try {
                 obj = target.newInstance();
             } catch (InstantiationException | IllegalAccessException e) {

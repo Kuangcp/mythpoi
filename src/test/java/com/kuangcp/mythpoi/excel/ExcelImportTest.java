@@ -18,15 +18,15 @@ public class ExcelImportTest {
 
     @Test
     public void testImportExcel(){
-        // TODO 接收就需要extends关键字???, 这里是因为方法重载过多,没有修改对应的导致的误判
-        List<? super ExcelTransform> result = ExcelImport.importExcel("/home/kcp/test/employee.xls", Employee.class);
+//        ExcelImport excelImport = new ExcelImport<Employee>();
+        // TODO 接收对应类型
+        List<Employee> result = ExcelImport.importExcel("/home/kcp/test/employee.xls", Employee.class);
         result.forEach(item -> {
-            System.out.println(item.toString());
-//            Employee e = (Employee)item;
-//            System.out.print(e.getNames());
-//            System.out.print(e.getPhone());
-//            System.out.print(e.getQQ());
-//            System.out.println("<<<<<");
+//            System.out.println(item.toString());
+            System.out.println(item.getEmail());
+            System.out.println(item.getNames());
+            System.out.println(item.getQQ());
+
         });
 
         Map<String, String> list = new HashMap<String, String>(0){};
