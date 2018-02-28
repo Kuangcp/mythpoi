@@ -7,17 +7,36 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.util.CellRangeAddress;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.List;
 
 /**
  * Created by https://github.com/kuangcp on 18-2-21  下午12:47
  * Excel导出工具类
+ *   TODO 异常的合理处理
  * @author kuangcp
  */
 public class ExcelExport {
     private static MainConfig mainConfig = MainConfig.getInstance();
+
+    /**
+     *
+     * @param filePath 文件的绝对路径
+     * @param sheetTitle 标题
+     * @param originData 主要数据
+     * @param target 实体的类对象
+     * @throws Exception
+     */
+    public static void exportExcel(String  filePath, String sheetTitle, List<? extends ExcelTransform> originData,
+                                   Class target) throws Exception {
+        File f= new File(filePath) ; // 声明File对象
+        try {
+            OutputStream out = new FileOutputStream(f);
+            exportExcel(out, sheetTitle, originData, target);
+        } catch (FileNotFoundException e11) {
+            e11.printStackTrace();
+        }
+    }
     /**
      * @param out 输出流
      * @param sheetTitle Sheet标题

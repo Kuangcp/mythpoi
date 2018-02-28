@@ -14,7 +14,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ExcelConfig {
-    String name();
     // 是否需要导出, 默认是导出true
     boolean exportFlag() default true;
+    // 列标题
+    String value() default "";
 }

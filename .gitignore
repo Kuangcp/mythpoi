@@ -16,3 +16,4 @@ Servers/
 .gradle/
 
 out/
+build/

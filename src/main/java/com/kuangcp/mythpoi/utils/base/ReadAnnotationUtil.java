@@ -34,7 +34,7 @@ public class ReadAnnotationUtil {
         for (Field field : fields) {
             if (field.isAnnotationPresent(ExcelConfig.class)) {
                 ExcelConfig excelConfig = field.getAnnotation(ExcelConfig.class);
-                if (excelConfig.exportFlag()) {list.add(new ExcelCellMeta(field, excelConfig.name()));}
+                if (excelConfig.exportFlag()) {list.add(new ExcelCellMeta(field, excelConfig.value()));}
             }
         }
         return list;

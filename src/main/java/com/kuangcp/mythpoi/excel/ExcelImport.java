@@ -1,6 +1,7 @@
 package com.kuangcp.mythpoi.excel;
 
 import com.kuangcp.mythpoi.excel.base.ExcelTransform;
+import com.kuangcp.mythpoi.excel.base.MainConfig;
 import com.kuangcp.mythpoi.excel.util.ExcelUtil;
 import com.kuangcp.mythpoi.utils.base.ReadAnnotationUtil;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -23,12 +24,13 @@ import java.util.List;
  *     通过属性对象进行设置值,将Excel的每一行转换成对象
  * 问题:
  * 一个Sheet对应一个类, 怎么处理多Sheet, 用Map?
- * 为什么使用super关键字
+ * TODO 为什么使用super关键字 extends怎么回事
  *
  * @author kuangcp
  */
 public class ExcelImport {
-    private HSSFWorkbook wb;
+    private static HSSFWorkbook wb;
+    private static MainConfig mainConfig = MainConfig.getInstance();
 
     /**
      * 根据Excel文件 将Excel转换成对象集合, 只读第一个Sheet
@@ -36,7 +38,7 @@ public class ExcelImport {
      * @param target 对象集合
      * @return List集合, 否则返回Null
      */
-    public List<? super ExcelTransform> importExcel(String filePath, Class target) {
+    public static List<? super ExcelTransform> importExcel(String filePath, Class<? extends ExcelTransform> target) {
         return importExcel(filePath, target, 0);
     }
 
@@ -46,7 +48,7 @@ public class ExcelImport {
      * @param target 实体类
      * @return List集合, 或者Null
      */
-    public List<? super ExcelTransform> importExcel(FileInputStream input, Class target) {
+    public static List<? super ExcelTransform> importExcel(FileInputStream input, Class<? extends ExcelTransform> target) {
         return importExcel(input, target, 0);
     }
 
@@ -57,7 +59,7 @@ public class ExcelImport {
      * @param sheetNum Sheet标号 0开始
      * @return List集合, 否则返回Null
      */
-    public List<? super ExcelTransform> importExcel(String filePath, Class target, int sheetNum) {
+    public static List<? super ExcelTransform> importExcel(String filePath, Class<? extends ExcelTransform> target, int sheetNum) {
         FileInputStream inputStream;
         try {
             inputStream = new FileInputStream(filePath);
@@ -75,7 +77,7 @@ public class ExcelImport {
      * @param sheetNum Sheet标号 0开始
      * @return List集合, 或者Null
      */
-    public List<? super ExcelTransform> importExcel(FileInputStream input, Class target, int sheetNum) {
+    public static List<? super ExcelTransform> importExcel(FileInputStream input, Class<? extends ExcelTransform> target, int sheetNum) {
         try {
             POIFSFileSystem fs = new POIFSFileSystem(input);
             wb = new HSSFWorkbook(fs);
@@ -85,6 +87,7 @@ public class ExcelImport {
         return readExcelSheet(sheetNum, target);
     }
 
+    // TODO 根据标题一一对应,读取多sheet
     private static void readTitle(Sheet sheet){
 
     }
@@ -94,13 +97,13 @@ public class ExcelImport {
      * @return 数据集合对象
      * TODO 为什么要用super关键字而不是extends关键字???
      */
-    private List<? super ExcelTransform> readExcelSheet(int sheetNum, Class<? extends ExcelTransform> target) {
-        List<? super ExcelTransform> result = new ArrayList<>(0);
+    private static List<? super ExcelTransform> readExcelSheet(int sheetNum, Class<? extends ExcelTransform> target) {
+        List<ExcelTransform> result = new ArrayList<>(0);
         List<ExcelCellMeta> metaList = ReadAnnotationUtil.getCellMetaData(target);
         HSSFSheet sheet = wb.getSheetAt(sheetNum);
         int rowNum = sheet.getLastRowNum();
         // 0 是标题 1 NPE? 2标题行
-        HSSFRow row = sheet.getRow(2);
+        HSSFRow row = sheet.getRow(mainConfig.getTitleTotalNum());
         int colNum = row.getPhysicalNumberOfCells();
         System.out.println("得到行"+rowNum+"列"+colNum);
         String[] titleList = new String[colNum];
@@ -113,7 +116,7 @@ public class ExcelImport {
             }
         }
 
-        for (int j = 3; j <= rowNum; j++) {
+        for (int j = mainConfig.getContentStartNum(); j <= rowNum; j++) {
             row = sheet.getRow(j);
             // TODO 思考:既然是自己和子类,为什么要用super关键字
             ExcelTransform obj = null;
@@ -123,6 +126,8 @@ public class ExcelImport {
                 e.printStackTrace();
             }
             for (int i = 0; i < colNum; i++) {
+                // TODO 富类型问题
+//                row.getCell(i).getCellType();
                 String temp = row.getCell(i).getStringCellValue();
                 Field colField = ExcelUtil.getOneByTitle(metaList, titleList[i]);
                 colField.setAccessible(true);

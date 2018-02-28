@@ -1,18 +1,9 @@
 package com.kuangcp.mythpoi.utils;
 
-import com.kuangcp.mythpoi.excel.base.BaseConfig;
-import com.kuangcp.mythpoi.excel.base.MainConfig;
 import com.kuangcp.mythpoi.utils.base.ExcelConfig;
-import org.ho.yaml.Yaml;
 import org.junit.Test;
-import sun.applet.Main;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
-import java.nio.charset.MalformedInputException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by https://github.com/kuangcp on 18-2-22  下午3:41
@@ -36,7 +27,7 @@ public class ReadAnnotation {
             if(field.isAnnotationPresent(ExcelConfig.class)){
                 System.out.print("具有注解  ");
                 ExcelConfig excelConfig = field.getAnnotation(ExcelConfig.class);
-                System.out.print(excelConfig.name());
+                System.out.print(excelConfig.value());
             }
             System.out.println(field.getName());
         }

@@ -18,9 +18,8 @@ public class ExcelImportTest {
 
     @Test
     public void testImportExcel(){
-        ExcelImport excelImport = new ExcelImport();
         // TODO 接收就需要extends关键字???, 这里是因为方法重载过多,没有修改对应的导致的误判
-        List<? super ExcelTransform> result = excelImport.importExcel("/home/kcp/test/employee.xls", Employee.class);
+        List<? super ExcelTransform> result = ExcelImport.importExcel("/home/kcp/test/employee.xls", Employee.class);
         result.forEach(item -> {
             System.out.println(item.toString());
 //            Employee e = (Employee)item;

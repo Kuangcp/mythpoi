@@ -10,13 +10,15 @@ public class Employee implements ExcelTransform{
     public static String EXPORT_TITLE="雇员表";
     public static String IMPORT_TITLE="雇员表";
 
-    @ExcelConfig(name = "姓名")
+    @ExcelConfig("姓名")
     private String names;
-    @ExcelConfig(name = "性别")
+    @ExcelConfig("性别")
     private String sex;
-    @ExcelConfig(name = "联系电话")
+//    @ExcelConfig("年龄")
+//    private int age;
+    @ExcelConfig("联系电话")
     private String phone;
-    @ExcelConfig(name = "QQ号码")
+    @ExcelConfig("QQ号码")
     private String QQ;
 
     private String email;
