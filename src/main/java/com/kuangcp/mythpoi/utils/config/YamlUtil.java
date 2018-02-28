@@ -38,7 +38,7 @@ public class YamlUtil {
      */
     public static <T> T readFile(Class<T> target, String filePath){
         File readFile=new File(filePath);
-        System.out.println("配置文件绝对路径: "+readFile.getAbsolutePath());
+//        System.out.println("配置文件绝对路径: "+readFile.getAbsolutePath());
         try {
             return Yaml.loadType(readFile, target);
         } catch (FileNotFoundException e) {

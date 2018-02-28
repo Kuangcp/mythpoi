@@ -49,8 +49,8 @@ public class ExcelExportTest {
 //                System.out.println(l);
 //            }
 //        }
-        ExcelExport.exportExcel("/home/kcp/test/employee.xls", Employee.EXPORT_TITLE, originList, Employee.class);
-        System.out.println("ok");
+        Boolean results = ExcelExport.exportExcel("/home/kcp/test/employee.xls", originList, Employee.class);
+        assert results;
     }
 
 }

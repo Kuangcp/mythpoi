@@ -2,13 +2,12 @@ package com.kuangcp.mythpoi.utils;
 
 import com.kuangcp.mythpoi.excel.base.ExcelTransform;
 import com.kuangcp.mythpoi.utils.base.ExcelConfig;
+import com.kuangcp.mythpoi.utils.base.ExcelSheet;
 import lombok.Data;
 
 @Data
+@ExcelSheet(exportTitle = "雇员表", importTitle = "雇员表")
 public class Employee implements ExcelTransform{
-
-    public static String EXPORT_TITLE="雇员表";
-    public static String IMPORT_TITLE="雇员表";
 
     @ExcelConfig("姓名")
     private String names;

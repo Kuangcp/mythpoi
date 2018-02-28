@@ -16,12 +16,29 @@ import java.util.List;
  * @author kuangcp
  */
 public class ReadAnnotationUtil {
+
     /**
+     * 获取类上注解, 得到Sheet的标题
+     * @param target 目标类
+     * @param export true/false 导出标题/导入标题
+     * @return String 标题
+     */
+    public static String getSheetTitle(Class<? extends ExcelTransform> target, boolean export){
+        ExcelSheet excelSheet = target.getAnnotation(ExcelSheet.class);
+        if(excelSheet == null) return " ";
+        if(export){
+            return excelSheet.exportTitle();
+        }
+        return excelSheet.importTitle();
+    }
+    /**
+     * 将原始对象集合转化成二维数据
      * @param target 目标类
      * @param originData 原始对象集合
      * @return List String [] 二维数据 也就是Excel的内容
      */
-    public static List<String[]> getContentByList(Class target, List<? extends ExcelTransform> originData) throws Exception {
+    public static List<String[]> getContentByList(Class target,
+                                                  List<? extends ExcelTransform> originData) throws Exception {
         return getContentByMeta(target, getCellMetaData(target), originData);
     }
 
@@ -40,7 +57,12 @@ public class ReadAnnotationUtil {
         return list;
     }
 
-    private static List<String[]> getContentByMeta(Class target, List<ExcelCellMeta> metaData, List<? extends ExcelTransform> originData) throws Exception {
+    private static List<String[]> getContentByMeta(Class target, List<ExcelCellMeta> metaData,
+                                                   List<? extends ExcelTransform> originData) throws Exception {
+        // 说明类里没有注解了的字段
+        if(metaData.size()==0){
+            return null;
+        }
         List<String[]> dataList = new ArrayList<>(0);
         for (ExcelTransform model : originData) {
             String[] line = new String[metaData.size()];
