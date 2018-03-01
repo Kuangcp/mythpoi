@@ -95,7 +95,6 @@ public class ExcelImport {
      * 根据sheetNum读取数据
      * @param sheetNum sheet标号 0开始
      * @return 数据集合对象
-     * TODO 为什么要用super关键字而不是extends关键字???
      */
     private static <T extends ExcelTransform> List<T> readExcelSheet(int sheetNum, Class<T> target) {
         List<T> result = new ArrayList<>(0);
@@ -106,39 +105,43 @@ public class ExcelImport {
         HSSFRow row = sheet.getRow(mainConfig.getTitleTotalNum());
         int colNum = row.getPhysicalNumberOfCells();
         System.out.println("得到行"+rowNum+"列"+colNum);
-        String[] titleList = new String[colNum];
+        String[] titleList = map(colNum, row, metaList);
+        // 只要有一行实例化出了问题, 就说明整个Sheet对应的实体类都有问题, 就没必要循环下去了
+        try {
+            for (int j = mainConfig.getContentStartNum(); j <= rowNum; j++) {
+                row = sheet.getRow(j);
+                T obj = target.newInstance();
+                for (int i = 0; i < colNum; i++) {
+                    // TODO 富类型问题
+    //                row.getCell(i).getCellType();
+                    String temp = row.getCell(i).getStringCellValue();
+                    Field colField = ExcelUtil.getOneByTitle(metaList, titleList[i]);
+                    colField.setAccessible(true);
+                    try {
+                        colField.set(obj, temp);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
+                result.add(obj);
+            }
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
-        // 将属性和Excel列标题对应起来,这样的写法就能够保证Excel的列顺序混乱也不影响导入
+    /**
+     * 将属性和Excel列标题对应起来,这样的写法就能够保证Excel的列顺序混乱也不影响导入
+     */
+    private static String[] map(int colNum, HSSFRow row, List<ExcelCellMeta> metaList){
+        String[] titleList = new String[colNum];
         for(int i=0; i<colNum; i++){
             String temp = row.getCell(i).getStringCellValue();
             for(ExcelCellMeta meta : metaList){
                 if(meta.getTitle().equals(temp)){titleList[i] = temp;}
             }
         }
-
-        for (int j = mainConfig.getContentStartNum(); j <= rowNum; j++) {
-            row = sheet.getRow(j);
-            // TODO 思考:既然是自己和子类,为什么要用super关键字
-            T obj = null;
-            try {
-                obj = target.newInstance();
-            } catch (InstantiationException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            for (int i = 0; i < colNum; i++) {
-                // TODO 富类型问题
-//                row.getCell(i).getCellType();
-                String temp = row.getCell(i).getStringCellValue();
-                Field colField = ExcelUtil.getOneByTitle(metaList, titleList[i]);
-                colField.setAccessible(true);
-                try {
-                    colField.set(obj, temp);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-            result.add(obj);
-        }
-        return result;
+        return titleList;
     }
 }

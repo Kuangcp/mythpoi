@@ -5,10 +5,10 @@ import com.kuangcp.mythpoi.excel.base.MainConfig;
 import com.kuangcp.mythpoi.utils.base.ReadAnnotationUtil;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -20,6 +20,7 @@ import java.util.List;
 public class ExcelExport {
     private static MainConfig mainConfig = MainConfig.getInstance();
     private static HSSFWorkbook workbook = new HSSFWorkbook();
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat(mainConfig.getDateFormat());
     /**
      * @param filePath 文件的绝对路径
      * @param originData 主要数据
@@ -45,13 +46,14 @@ public class ExcelExport {
             }
             Class<? extends ExcelTransform> target =  originData.get(0).getClass();
             String sheetTitle = ReadAnnotationUtil.getSheetTitle(target, true);
-            List<String[]> dataList = ReadAnnotationUtil.getContentByList(target, originData);
+            List<Object[]> dataList = ReadAnnotationUtil.getContentByList(target, originData);
             if(dataList == null){
                 System.out.println(target.getSimpleName()+" 中没有已注解的字段, 导出失败");
                 return false;
             }
             HSSFSheet sheet = workbook.createSheet(sheetTitle);
             HSSFCellStyle columnTopStyle = getColumnTopStyle(workbook);
+
             setSheetTitle(sheet, dataList, sheetTitle, columnTopStyle);
             setColumnTitle(dataList, sheet, target, columnTopStyle);
             setContent(dataList, sheet);
@@ -65,7 +67,7 @@ public class ExcelExport {
     /**
      * 设置sheet的列头
      */
-    private static void setColumnTitle(List<String[]> dataList,HSSFSheet sheet, Class target, HSSFCellStyle columnTopStyle){
+    private static void setColumnTitle(List<Object[]> dataList,HSSFSheet sheet, Class target, HSSFCellStyle columnTopStyle){
         List<ExcelCellMeta> metaList = ReadAnnotationUtil.getCellMetaData(target);
         HSSFRow row = sheet.createRow(mainConfig.getTitleTotalNum());
         int columnNum = dataList.get(mainConfig.getStartRowNum()).length;
@@ -82,22 +84,47 @@ public class ExcelExport {
     /**
      * 填充sheet内容
      */
-    private static void setContent(List<String[]> dataList,HSSFSheet sheet){
+    private static void setContent(List<Object[]> dataList,HSSFSheet sheet){
         HSSFCellStyle style = getStyle(workbook);
         for (int m = 0; m < dataList.size(); m++) {
-            String[] obj = dataList.get(m);
+            Object[] obj = dataList.get(m);
             HSSFRow row = sheet.createRow(m + mainConfig.getContentStartNum());
+            HSSFCell cell = null;
             for (int j = 0; j < obj.length; j++) {
-                HSSFCell cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
-                cell.setCellValue(obj[j]);
-                cell.setCellStyle(style);
+                Object temp = obj[j];
+                // TODO 空格 布尔类型(TRUE FALSE) 字符串 数值 | 错误 公式
+                if(temp == null || temp.equals("")){
+                    cell = row.createCell(j, HSSFCell.CELL_TYPE_BLANK);
+                }else if(temp.getClass().getSimpleName().equals("String")){
+                    cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
+                    cell.setCellValue(obj[j].toString());
+                }else if(temp.getClass().getSimpleName().equals("Date")){
+                    cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
+                    cell.setCellValue(dateFormat.format(temp));
+                }else if(temp.getClass().getSimpleName().equals("Boolean")){
+                    cell = row.createCell(j, HSSFCell.CELL_TYPE_BOOLEAN);
+                    cell.setCellValue(Boolean.valueOf(temp.toString()));
+                }else if(temp.getClass().getSimpleName().equals("Integer")){
+                    cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
+                    cell.setCellValue(Integer.valueOf(temp.toString()));
+                }else if(temp.getClass().getSimpleName().equals("Float")){
+                    cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
+                    cell.setCellValue(Float.valueOf(temp.toString()));
+                }else if(temp.getClass().getSimpleName().equals("Double")){
+                    cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
+                    cell.setCellValue(Double.valueOf(temp.toString()));
+                }
+                if(cell != null) {
+                    cell.setCellStyle(style);
+                }
+
             }
         }
     }
     /**
      * 设置表格标题行
      */
-    private static void setSheetTitle(HSSFSheet sheet, List<String[]> dataList, String sheetTitle, HSSFCellStyle columnTopStyle){
+    private static void setSheetTitle(HSSFSheet sheet, List<Object[]> dataList, String sheetTitle, HSSFCellStyle columnTopStyle){
 
         HSSFRow row = sheet.createRow(mainConfig.getStartColNum());
         HSSFCell cellTitle = row.createCell(mainConfig.getStartColNum());

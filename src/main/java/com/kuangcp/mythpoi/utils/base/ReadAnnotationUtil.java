@@ -37,9 +37,9 @@ public class ReadAnnotationUtil {
      * @param originData 原始对象集合
      * @return List String [] 二维数据 也就是Excel的内容
      */
-    public static List<String[]> getContentByList(Class target,
+    public static List<Object[]> getContentByList(Class target,
                                                   List<? extends ExcelTransform> originData) throws Exception {
-        return getContentByMeta(target, getCellMetaData(target), originData);
+        return getContentByMetas(target, getCellMetaData(target), originData);
     }
 
     /**
@@ -57,15 +57,45 @@ public class ReadAnnotationUtil {
         return list;
     }
 
-    private static List<String[]> getContentByMeta(Class target, List<ExcelCellMeta> metaData,
+    /**
+     * 根据元数据, 将对象集合准换成二维数组
+     */
+//    private static List<String[]> getContentByMeta(Class target, List<ExcelCellMeta> metaData,
+//                                                   List<? extends ExcelTransform> originData) throws Exception {
+//        // 说明类里没有注解了的字段
+//        if(metaData.size()==0){
+//            return null;
+//        }
+//        List<String[]> dataList = new ArrayList<>(0);
+//        for (ExcelTransform model : originData) {
+//            String[] line = new String[metaData.size()];
+//            int index = 0;
+//            for (ExcelCellMeta meta : metaData) {
+////                Object result = meta.getField().get(model); //这样是要public修饰才行
+//                PropertyDescriptor propertyDescriptor = new PropertyDescriptor(meta.getField().getName(), target);
+//                //就是得到了属性的get方法
+//                Method method = propertyDescriptor.getReadMethod();
+//                Object result = method.invoke(model);
+//                if(result == null){
+//                    line[index] = "";
+//                }else {
+//                    line[index] = result.toString();
+//                }
+//                index++;
+//            }
+//            dataList.add(line);
+//        }
+//        return dataList;
+//    }
+    private static List<Object[]> getContentByMetas(Class target, List<ExcelCellMeta> metaData,
                                                    List<? extends ExcelTransform> originData) throws Exception {
         // 说明类里没有注解了的字段
         if(metaData.size()==0){
             return null;
         }
-        List<String[]> dataList = new ArrayList<>(0);
+        List<Object[]> dataList = new ArrayList<>(0);
         for (ExcelTransform model : originData) {
-            String[] line = new String[metaData.size()];
+            Object[] line = new Object[metaData.size()];
             int index = 0;
             for (ExcelCellMeta meta : metaData) {
 //                Object result = meta.getField().get(model); //这样是要public修饰才行
@@ -76,7 +106,7 @@ public class ReadAnnotationUtil {
                 if(result == null){
                     line[index] = "";
                 }else {
-                    line[index] = result.toString();
+                    line[index] = result;
                 }
                 index++;
             }

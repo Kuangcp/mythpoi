@@ -14,6 +14,7 @@ public class MainConfig {
     private int startRowNum = 0;
     private int titleTotalNum = 2;
     private int contentStartNum = 3;
+    private String dateFormat = "yyyy/MM/dd";
 
     private static MainConfig mainConfig = null;
     /**

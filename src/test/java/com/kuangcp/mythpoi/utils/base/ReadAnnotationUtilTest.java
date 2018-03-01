@@ -4,6 +4,7 @@ import com.kuangcp.mythpoi.utils.Employee;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -12,22 +13,6 @@ import java.util.List;
  * @author kuangcp
  */
 public class ReadAnnotationUtilTest {
-
-//    @Test
-//    public void testGetFieldTitleMap() {
-//        Map<String, String> result = ReadAnnotationUtil.getFieldTitleMap(Employee.class);
-//        for(Map.Entry<String, String> entry:result.entrySet()){
-//            System.out.println(entry.getKey() + " | " + entry.getValue());
-//        }
-//    }
-
-//    @Test
-//    public void testgetFieldAnnotationMap(){
-//        Map<String, String> result = ReadAnnotationUtil.getFieldAnnotationMap(Employee.class, ExcelConfig.class, "name");
-//        for(Map.Entry<String, String> entry:result.entrySet()){
-//            System.out.println(entry.getKey() + " | " + entry.getValue());
-//        }
-//    }
     @Test
     public void testTransform() throws Exception {
         Employee e1 = new Employee();
@@ -42,13 +27,14 @@ public class ReadAnnotationUtilTest {
         e2.setPhone("phone2");
         e2.setSex("sex2");
         e2.setQQ("QQ2");
+        e2.setBirth(new Date());
         List<Employee> originList = new ArrayList<>(0);
         originList.add(e1);
         originList.add(e2);
-        List<String[]> result = ReadAnnotationUtil.getContentByList(Employee.class, originList);
-        for(String [] temp : result){
+        List<Object[]> result = ReadAnnotationUtil.getContentByList(Employee.class, originList);
+        for(Object [] temp : result){
 //            System.out.println(temp.toString());
-            for(String n : temp){
+            for(Object n : temp){
                 System.out.print(n);
             }
             System.out.println();

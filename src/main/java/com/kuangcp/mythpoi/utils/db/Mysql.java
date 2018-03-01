@@ -136,16 +136,14 @@ public class Mysql{
         try{
             Class.forName(Driver);
             cn = DriverManager.getConnection(URL.toString());
-            cn.setAutoCommit(false);//取消自动提交
-            int i=0;
-            for (String sql:sqls){
-                i++;
-                ps=cn.prepareStatement(sql);
+            cn.setAutoCommit(false);
+            for (int i = 0; i < sqls.length; i++) {
+                ps=cn.prepareStatement(sqls[i]);
                 ps.addBatch();
-//				System.out.println("第"+i+"条记录插入成功");
+                System.out.println("第"+i+"条记录插入成功");
             }
             ps.executeBatch();
-            System.out.println("批量操作无异常");
+            System.out.println("批量操作无异常, 全部提交");
             cn.commit();//无异常再提交
         }catch(Exception e){
             success = false;
@@ -167,7 +165,7 @@ public class Mysql{
         return success;
     }
     /**关闭数据库资源*/
-    public void closeAll(){
+    private void closeAll(){
         //关闭资源 后打开先关闭
         try {
             if(rs!=null) rs.close();

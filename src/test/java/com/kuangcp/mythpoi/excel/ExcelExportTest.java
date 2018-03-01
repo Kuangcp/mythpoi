@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,12 +30,17 @@ public class ExcelExportTest {
         e1.setPhone("Phone1");
         e1.setSex("sex1");
         e1.setEmail("email");
+        e1.setBirth(new Date());
+        e1.setDeath(true);
+        e1.setAge(1212);
+        e1.setScore(12.1);
 
         Employee e2 = new Employee();
         e2.setNames("name2");
         e2.setPhone("phone2");
         e2.setSex("sex2");
         e2.setQQ("QQ2");
+        e2.setDeath(false);
 
         Employee e3 = new Employee();
         e3.setNames("name2");
@@ -51,13 +57,17 @@ public class ExcelExportTest {
     public void testExports(){
         Boolean results = ExcelExport.exportExcel("/home/kcp/test/employee.xls", originList);
         assert results;
+
+        Object[] re = new Object[3];
+        re[0] = 1;
+
     }
     @Test
     public void testGetContentByList() throws Exception {
-        List<String[]> result = ReadAnnotationUtil.getContentByList(Employee.class, originList);
-        for(String [] temp: result){
-            for(String l : temp){
-                System.out.print(l);
+        List<Object[]> result = ReadAnnotationUtil.getContentByList(Employee.class, originList);
+        for(Object [] temp: result){
+            for(Object l : temp){
+                System.out.print(l.toString());
             }
             System.out.println();
         }

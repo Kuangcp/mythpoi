@@ -1,6 +1,6 @@
 # myth-poi
 > More easy to Export & Import Excel&Word file.
-
+[![Maintainability](https://api.codeclimate.com/v1/badges/f780223b0a257f652c4c/maintainability)](https://codeclimate.com/github/Kuangcp/mythpoi/maintainability)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5ffa0f4b455e4eba8fe66464792ccd7b)](https://www.codacy.com/app/Kuangcp/mythpoi?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Kuangcp/mythpoi&amp;utm_campaign=Badge_Grade)
 [![codebeat badge](https://codebeat.co/badges/ab5fad57-0c61-49f6-a5ec-eb975b9d5c66)](https://codebeat.co/projects/github-com-kuangcp-mythpoi-master)
 [![Java Version](https://img.shields.io/badge/Java-JRE%208-red.svg)](https://www.java.com/download/)
@@ -18,7 +18,7 @@ _Maven_
 <dependency>
     <groupId>com.github.kuangcp</groupId>
     <artifactId>myth-poi</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
 </dependency>
 ```
 
@@ -49,7 +49,8 @@ public class Employee implements ExcelTransform{
 
 **********
 - 2.Export Excel file  
-    - `ExcelExport.exportExcel("/home/kcp/test/employee.xls", originList);` `originList` is a Employee List   
+    - `ExcelExport.exportExcel("/home/kcp/test/employee.xls", originList);`
+    - `originList` is a Employee List   
 
 - 3.Import Excel file
     - `List<Employee> result = ExcelImport.importExcel("/home/kcp/test/employee.xls", Employee.class);`
