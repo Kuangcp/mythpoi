@@ -3,24 +3,29 @@ package com.kuangcp.mythpoi.excel;
 import com.kuangcp.mythpoi.excel.base.ExcelTransform;
 import com.kuangcp.mythpoi.excel.base.MainConfig;
 import com.kuangcp.mythpoi.utils.base.ReadAnnotationUtil;
+import com.kuangcp.mythpoi.utils.config.DateUtil;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.util.CellRangeAddress;
 
-import java.io.*;
-import java.text.SimpleDateFormat;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
  * Created by https://github.com/kuangcp on 18-2-21  下午12:47
  * Excel导出工具类
  *   TODO 异常的合理处理
+ *   目前单元格的类型尚不支持公式和错误
+ *   Boolean 缺省为false,
+ *   字符串缺省为空串, 数值类型为空则是0
  * @author kuangcp
  */
 public class ExcelExport {
     private static MainConfig mainConfig = MainConfig.getInstance();
     private static HSSFWorkbook workbook = new HSSFWorkbook();
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat(mainConfig.getDateFormat());
     /**
      * @param filePath 文件的绝对路径
      * @param originData 主要数据
@@ -93,26 +98,36 @@ public class ExcelExport {
             for (int j = 0; j < obj.length; j++) {
                 Object temp = obj[j];
                 // TODO 空格 布尔类型(TRUE FALSE) 字符串 数值 | 错误 公式
-                if(temp == null || temp.equals("")){
-                    cell = row.createCell(j, HSSFCell.CELL_TYPE_BLANK);
-                }else if(temp.getClass().getSimpleName().equals("String")){
-                    cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
-                    cell.setCellValue(obj[j].toString());
-                }else if(temp.getClass().getSimpleName().equals("Date")){
-                    cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
-                    cell.setCellValue(dateFormat.format(temp));
-                }else if(temp.getClass().getSimpleName().equals("Boolean")){
-                    cell = row.createCell(j, HSSFCell.CELL_TYPE_BOOLEAN);
-                    cell.setCellValue(Boolean.valueOf(temp.toString()));
-                }else if(temp.getClass().getSimpleName().equals("Integer")){
-                    cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
-                    cell.setCellValue(Integer.valueOf(temp.toString()));
-                }else if(temp.getClass().getSimpleName().equals("Float")){
-                    cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
-                    cell.setCellValue(Float.valueOf(temp.toString()));
-                }else if(temp.getClass().getSimpleName().equals("Double")){
-                    cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
-                    cell.setCellValue(Double.valueOf(temp.toString()));
+                // 日期是数值类型
+//                if(temp == null || temp.equals("")){
+//                    cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
+//                    cell.setCellValue("");
+//                }else
+                switch (temp.getClass().getSimpleName()) {
+                    case "String":
+                        cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
+                        cell.setCellValue(obj[j].toString());
+                        break;
+                    case "Date":
+                        cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
+                        cell.setCellValue(DateUtil.format(temp));
+                        break;
+                    case "Boolean":
+                        cell = row.createCell(j, HSSFCell.CELL_TYPE_BOOLEAN);
+                        cell.setCellValue(Boolean.valueOf(temp.toString()));
+                        break;
+                    case "Integer":
+                        cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
+                        cell.setCellValue(Integer.valueOf(temp.toString()));
+                        break;
+                    case "Float":
+                        cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
+                        cell.setCellValue(Float.valueOf(temp.toString()));
+                        break;
+                    case "Double":
+                        cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
+                        cell.setCellValue(Double.valueOf(temp.toString()));
+                        break;
                 }
                 if(cell != null) {
                     cell.setCellStyle(style);

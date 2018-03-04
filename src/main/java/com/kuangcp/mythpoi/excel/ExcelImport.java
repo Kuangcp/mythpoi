@@ -4,6 +4,8 @@ import com.kuangcp.mythpoi.excel.base.ExcelTransform;
 import com.kuangcp.mythpoi.excel.base.MainConfig;
 import com.kuangcp.mythpoi.excel.util.ExcelUtil;
 import com.kuangcp.mythpoi.utils.base.ReadAnnotationUtil;
+import com.kuangcp.mythpoi.utils.config.DateUtil;
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -13,6 +15,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +58,7 @@ public class ExcelImport {
 
     /**
      * 根据Excel文件 将Excel转换成对象集合
-     * @param filePath Excel文件绝对路径
+     * @param filePath Exzcel文件绝对路径
      * @param target 对象集合
      * @param sheetNum Sheet标号 0开始
      * @return List集合, 否则返回Null
@@ -112,20 +116,46 @@ public class ExcelImport {
                 row = sheet.getRow(j);
                 T obj = target.newInstance();
                 for (int i = 0; i < colNum; i++) {
-                    // TODO 富类型问题
-    //                row.getCell(i).getCellType();
-                    String temp = row.getCell(i).getStringCellValue();
+
                     Field colField = ExcelUtil.getOneByTitle(metaList, titleList[i]);
                     colField.setAccessible(true);
-                    try {
-                        colField.set(obj, temp);
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+                    String fieldType = colField.getType().getSimpleName();
+                    HSSFCell cell = row.getCell(i);
+                    int cellType = cell.getCellType();
+                    System.out.println(colField.getName()+"|"+fieldType+" | "+cellType);
+
+                    switch (cellType) {
+                        case HSSFCell.CELL_TYPE_STRING:
+                            if ("Date".equals(fieldType)) {
+                                colField.set(obj, DateUtil.parse(cell.getStringCellValue()));
+                            } else {
+                                colField.set(obj, cell.getStringCellValue());
+                            }
+                            break;
+//                        case HSSFCell.CELL_TYPE_BLANK:
+//                            System.out.println("字段" + colField.getName());
+//                            if ("Boolean".equals(fieldType)) {
+//                                colField.set(obj, cell.getBooleanCellValue());
+//                            } else {
+//                                colField.set(obj, "");
+//                            }
+//                            break;
+                        case HSSFCell.CELL_TYPE_NUMERIC:
+                            if ("Integer".equals(fieldType) || "int".equals(fieldType)) {
+                                colField.set(obj, (int) cell.getNumericCellValue());
+                            } else {
+                                colField.set(obj, cell.getNumericCellValue());
+                            }
+                            break;
+                        case HSSFCell.CELL_TYPE_BOOLEAN:
+                            colField.set(obj, cell.getBooleanCellValue());
+                            break;
                     }
+
                 }
                 result.add(obj);
             }
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException | ParseException e) {
             e.printStackTrace();
         }
         return result;

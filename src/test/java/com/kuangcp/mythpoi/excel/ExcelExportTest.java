@@ -32,21 +32,25 @@ public class ExcelExportTest {
         e1.setEmail("email");
         e1.setBirth(new Date());
         e1.setDeath(true);
-        e1.setAge(1212);
+//        e1.setAge(1212);
         e1.setScore(12.1);
+        e1.setDeath(false);
 
         Employee e2 = new Employee();
-        e2.setNames("name2");
+//        e2.setNames("name2");
         e2.setPhone("phone2");
         e2.setSex("sex2");
         e2.setQQ("QQ2");
         e2.setDeath(false);
+        e2.setBirth(new Date());
 
         Employee e3 = new Employee();
         e3.setNames("name2");
         e3.setPhone("phone2");
         e3.setSex("sex2");
         e3.setQQ("QQ2");
+        e3.setBirth(new Date());
+        e3.setDeath(false);
 
         originList.add(e1);
         originList.add(e2);
