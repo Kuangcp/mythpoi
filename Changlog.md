@@ -3,8 +3,9 @@
 - 导入时, 列标题, 加上正则表达式功能
 
 # ChangeLog
+
 ## 0.2.0 
-- TODO Excel cell的 富数据类型
+- Excel cell的 富数据类型
 
 ## 0.1.2
 - 完成泛型的设计

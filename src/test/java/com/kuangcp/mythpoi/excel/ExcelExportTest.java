@@ -61,10 +61,6 @@ public class ExcelExportTest {
     public void testExports(){
         Boolean results = ExcelExport.exportExcel("/home/kcp/test/employee.xls", originList);
         assert results;
-
-        Object[] re = new Object[3];
-        re[0] = 1;
-
     }
     @Test
     public void testGetContentByList() throws Exception {

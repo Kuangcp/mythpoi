@@ -1,5 +1,6 @@
 # myth-poi
 > More easy to Export & Import Excel&Word file.
+
 [![Maintainability](https://api.codeclimate.com/v1/badges/f780223b0a257f652c4c/maintainability)](https://codeclimate.com/github/Kuangcp/mythpoi/maintainability)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5ffa0f4b455e4eba8fe66464792ccd7b)](https://www.codacy.com/app/Kuangcp/mythpoi?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Kuangcp/mythpoi&amp;utm_campaign=Badge_Grade)
 [![codebeat badge](https://codebeat.co/badges/ab5fad57-0c61-49f6-a5ec-eb975b9d5c66)](https://codebeat.co/projects/github-com-kuangcp-mythpoi-master)
@@ -13,20 +14,18 @@
 
 - 2.Add Dependency  
 
-_Maven_
+_2.1 Maven_
 ```xml
-<dependency>
-    <groupId>com.github.kuangcp</groupId>
-    <artifactId>myth-poi</artifactId>
-    <version>0.1.2</version>
-</dependency>
+    <dependency>
+        <groupId>com.github.kuangcp</groupId>
+        <artifactId>myth-poi</artifactId>
+        <version>0.1.2</version>
+    </dependency>
 ```
-
-_Gradle_
+_2.2 Gradle_
 ```groovy
     compile("com.github.kuangcp:myth-poi:0.1.1")
 ```
-
 ## How to use
 ### Excel 
 - 1.Implement Interface:

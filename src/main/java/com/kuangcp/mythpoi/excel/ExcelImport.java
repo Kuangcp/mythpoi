@@ -132,14 +132,14 @@ public class ExcelImport {
                                 colField.set(obj, cell.getStringCellValue());
                             }
                             break;
-//                        case HSSFCell.CELL_TYPE_BLANK:
-//                            System.out.println("字段" + colField.getName());
-//                            if ("Boolean".equals(fieldType)) {
-//                                colField.set(obj, cell.getBooleanCellValue());
-//                            } else {
-//                                colField.set(obj, "");
-//                            }
-//                            break;
+                        case HSSFCell.CELL_TYPE_BLANK:
+                            System.out.println("字段" + colField.getName());
+                            if ("Boolean".equals(fieldType)) {
+                                colField.set(obj, cell.getBooleanCellValue());
+                            } else {
+                                colField.set(obj, "");
+                            }
+                            break;
                         case HSSFCell.CELL_TYPE_NUMERIC:
                             if ("Integer".equals(fieldType) || "int".equals(fieldType)) {
                                 colField.set(obj, (int) cell.getNumericCellValue());
