@@ -16,7 +16,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,7 +122,6 @@ public class ExcelImport {
                     HSSFCell cell = row.getCell(i);
                     int cellType = cell.getCellType();
                     System.out.println(colField.getName()+"|"+fieldType+" | "+cellType);
-
                     switch (cellType) {
                         case HSSFCell.CELL_TYPE_STRING:
                             if ("Date".equals(fieldType)) {
