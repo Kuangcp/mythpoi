@@ -150,6 +150,8 @@ public class ExcelImport {
                         case HSSFCell.CELL_TYPE_BOOLEAN:
                             colField.set(obj, cell.getBooleanCellValue());
                             break;
+                        default:
+                            break;
                     }
 
                 }
