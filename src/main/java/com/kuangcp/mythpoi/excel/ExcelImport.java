@@ -121,7 +121,7 @@ public class ExcelImport {
                     String fieldType = colField.getType().getSimpleName();
                     HSSFCell cell = row.getCell(i);
                     int cellType = cell.getCellType();
-                    System.out.println(colField.getName()+"|"+fieldType+" | "+cellType);
+//                    System.out.println(colField.getName()+"|"+fieldType+" | "+cellType);
                     switch (cellType) {
                         case HSSFCell.CELL_TYPE_STRING:
                             if ("Date".equals(fieldType)) {
@@ -141,7 +141,9 @@ public class ExcelImport {
                         case HSSFCell.CELL_TYPE_NUMERIC:
                             if ("Integer".equals(fieldType) || "int".equals(fieldType)) {
                                 colField.set(obj, (int) cell.getNumericCellValue());
-                            } else {
+                            }else if ("Long".equals(fieldType) || "long".equals(fieldType)) {
+                                colField.set(obj, (long) cell.getNumericCellValue());
+                            }else {
                                 colField.set(obj, cell.getNumericCellValue());
                             }
                             break;

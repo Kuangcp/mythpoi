@@ -30,8 +30,8 @@ public class ExcelExport {
      * @param filePath 文件的绝对路径
      * @param originData 主要数据
      */
-    public static <T extends ExcelTransform> boolean  exportExcel(String  filePath, List<T> originData) {
-        File f = new File(filePath); // 声明File对象
+    public static boolean  exportExcel(String  filePath, List<? extends ExcelTransform> originData) {
+        File f = new File(filePath);
         OutputStream out = null;
         try {
             out = new FileOutputStream(f);
@@ -87,6 +87,7 @@ public class ExcelExport {
         }
     }
     /**
+     * cell分为: 空格 布尔类型(TRUE FALSE) 字符串 数值 | 错误 公式
      * 填充sheet内容
      */
     private static void setContent(List<Object[]> dataList,HSSFSheet sheet){
@@ -97,12 +98,7 @@ public class ExcelExport {
             HSSFCell cell = null;
             for (int j = 0; j < obj.length; j++) {
                 Object temp = obj[j];
-                // TODO 空格 布尔类型(TRUE FALSE) 字符串 数值 | 错误 公式
-                // 日期是数值类型
-//                if(temp == null || temp.equals("")){
-//                    cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
-//                    cell.setCellValue("");
-//                }else
+
                 switch (temp.getClass().getSimpleName()) {
                     case "String":
                         cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
@@ -116,6 +112,10 @@ public class ExcelExport {
                         cell = row.createCell(j, HSSFCell.CELL_TYPE_BOOLEAN);
                         cell.setCellValue(Boolean.valueOf(temp.toString()));
                         break;
+                    case "Long":
+                        cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
+                        cell.setCellValue(Long.valueOf(temp.toString()));
+                        break;
                     case "Integer":
                         cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
                         cell.setCellValue(Integer.valueOf(temp.toString()));
@@ -127,6 +127,8 @@ public class ExcelExport {
                     case "Double":
                         cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
                         cell.setCellValue(Double.valueOf(temp.toString()));
+                        break;
+                    default:
                         break;
                 }
                 if(cell != null) {
