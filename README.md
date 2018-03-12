@@ -54,4 +54,7 @@ public class Employee implements ExcelTransform{
 - 3.Import Excel file
     - `List<Employee> result = ExcelImport.importExcel("/home/kcp/test/employee.xls", Employee.class);`
     
+_Excel File_
+![excel.png](https://raw.githubusercontent.com/Kuangcp/ImageRepos/master/Image/mythpoi/excel.png)
+
 ### Word

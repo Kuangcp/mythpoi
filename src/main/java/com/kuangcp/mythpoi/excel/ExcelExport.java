@@ -1,18 +1,22 @@
 package com.kuangcp.mythpoi.excel;
 
 import com.kuangcp.mythpoi.excel.base.ExcelTransform;
+import com.kuangcp.mythpoi.excel.base.LoadCellValue;
 import com.kuangcp.mythpoi.excel.base.MainConfig;
 import com.kuangcp.mythpoi.utils.base.ReadAnnotationUtil;
 import com.kuangcp.mythpoi.utils.config.DateUtil;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by https://github.com/kuangcp on 18-2-21  下午12:47
@@ -26,6 +30,11 @@ import java.util.List;
 public class ExcelExport {
     private static MainConfig mainConfig = MainConfig.getInstance();
     private static HSSFWorkbook workbook = new HSSFWorkbook();
+    private static Map<String, LoadCellValue> loadCellValueMap;
+
+    static{
+
+    }
     /**
      * @param filePath 文件的绝对路径
      * @param originData 主要数据
@@ -58,7 +67,6 @@ public class ExcelExport {
             }
             HSSFSheet sheet = workbook.createSheet(sheetTitle);
             HSSFCellStyle columnTopStyle = getColumnTopStyle(workbook);
-
             setSheetTitle(sheet, dataList, sheetTitle, columnTopStyle);
             setColumnTitle(dataList, sheet, target, columnTopStyle);
             setContent(dataList, sheet);
@@ -87,54 +95,63 @@ public class ExcelExport {
         }
     }
     /**
+     * 根据List来创造出cell
+     */
+    private static void loadCell(Object[] obj, int j, HSSFRow row){
+        HSSFCellStyle style = getStyle(workbook);
+        Object temp = obj[j];
+        HSSFCell cell = null;
+        Class result = temp.getClass();
+
+        switch (temp.getClass().getSimpleName()) {
+            case "String":
+                cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
+                cell.setCellValue(obj[j].toString());
+                break;
+            case "Date":
+                cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
+                cell.setCellValue(DateUtil.format(temp));
+                break;
+            case "Boolean":
+                cell = row.createCell(j, HSSFCell.CELL_TYPE_BOOLEAN);
+                cell.setCellValue(Boolean.valueOf(temp.toString()));
+                break;
+            case "Long":
+                cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
+                cell.setCellValue(Long.valueOf(temp.toString()));
+                break;
+            case "Integer":
+                cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
+                cell.setCellValue(Integer.valueOf(temp.toString()));
+                break;
+            case "Float":
+                cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
+                cell.setCellValue(Float.valueOf(temp.toString()));
+                break;
+            case "Double":
+                cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
+                cell.setCellValue(Double.valueOf(temp.toString()));
+                break;
+            default:
+                break;
+        }
+        if(cell != null) {
+            cell.setCellStyle(style);
+        }
+    }
+
+
+    /**
      * cell分为: 空格 布尔类型(TRUE FALSE) 字符串 数值 | 错误 公式
      * 填充sheet内容
      */
     private static void setContent(List<Object[]> dataList,HSSFSheet sheet){
-        HSSFCellStyle style = getStyle(workbook);
+
         for (int m = 0; m < dataList.size(); m++) {
             Object[] obj = dataList.get(m);
             HSSFRow row = sheet.createRow(m + mainConfig.getContentStartNum());
-            HSSFCell cell = null;
             for (int j = 0; j < obj.length; j++) {
-                Object temp = obj[j];
-
-                switch (temp.getClass().getSimpleName()) {
-                    case "String":
-                        cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
-                        cell.setCellValue(obj[j].toString());
-                        break;
-                    case "Date":
-                        cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
-                        cell.setCellValue(DateUtil.format(temp));
-                        break;
-                    case "Boolean":
-                        cell = row.createCell(j, HSSFCell.CELL_TYPE_BOOLEAN);
-                        cell.setCellValue(Boolean.valueOf(temp.toString()));
-                        break;
-                    case "Long":
-                        cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
-                        cell.setCellValue(Long.valueOf(temp.toString()));
-                        break;
-                    case "Integer":
-                        cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
-                        cell.setCellValue(Integer.valueOf(temp.toString()));
-                        break;
-                    case "Float":
-                        cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
-                        cell.setCellValue(Float.valueOf(temp.toString()));
-                        break;
-                    case "Double":
-                        cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
-                        cell.setCellValue(Double.valueOf(temp.toString()));
-                        break;
-                    default:
-                        break;
-                }
-                if(cell != null) {
-                    cell.setCellStyle(style);
-                }
-
+                loadCell(obj, j, row);
             }
         }
     }

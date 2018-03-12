@@ -62,6 +62,18 @@ public class ExcelExportTest {
         Boolean results = ExcelExport.exportExcel("/home/kcp/test/employee.xls", originList);
         assert results;
     }
+
+    @Test
+    public void testOut(){
+        File f = new File("/home/kcp/test/employee.xls");
+        OutputStream out = null;
+        try {
+            out = new FileOutputStream(f);
+        } catch (FileNotFoundException e11) {
+            e11.printStackTrace();
+        }
+        ExcelExport.exportExcel(out, originList);
+    }
     @Test
     public void testGetContentByList() throws Exception {
         List<Object[]> result = ReadAnnotationUtil.getContentByList(Employee.class, originList);
