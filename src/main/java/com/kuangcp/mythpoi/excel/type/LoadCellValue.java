@@ -1,4 +1,4 @@
-package com.kuangcp.mythpoi.excel.base;
+package com.kuangcp.mythpoi.excel.type;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -16,5 +16,5 @@ public interface LoadCellValue {
      * @param value 装载的值
      * @return  HSSFCell 单元格对象
      */
-    HSSFCell loadValue(HSSFRow row, int index, String value);
+    HSSFCell loadValue(HSSFRow row, int index, Object value);
 }

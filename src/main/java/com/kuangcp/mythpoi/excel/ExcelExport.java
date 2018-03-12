@@ -1,20 +1,18 @@
 package com.kuangcp.mythpoi.excel;
 
 import com.kuangcp.mythpoi.excel.base.ExcelTransform;
-import com.kuangcp.mythpoi.excel.base.LoadCellValue;
 import com.kuangcp.mythpoi.excel.base.MainConfig;
+import com.kuangcp.mythpoi.excel.type.*;
 import com.kuangcp.mythpoi.utils.base.ReadAnnotationUtil;
-import com.kuangcp.mythpoi.utils.config.DateUtil;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,10 +28,17 @@ import java.util.Map;
 public class ExcelExport {
     private static MainConfig mainConfig = MainConfig.getInstance();
     private static HSSFWorkbook workbook = new HSSFWorkbook();
-    private static Map<String, LoadCellValue> loadCellValueMap;
+    private static Map<String, LoadCellValue> handlerMap = new HashMap<>(7);
 
+    // 字典结合策略模式简化代码
     static{
-
+        handlerMap.put("String", new StringHandler());
+        handlerMap.put("Date", new DateHandler());
+        handlerMap.put("Boolean", new BooleanHandler());
+        handlerMap.put("Long", new LongHandler());
+        handlerMap.put("Integer", new IntegerHandler());
+        handlerMap.put("Double", new DoubleHandler());
+        handlerMap.put("Float", new FloatHandler());
     }
     /**
      * @param filePath 文件的绝对路径
@@ -95,63 +100,26 @@ public class ExcelExport {
         }
     }
     /**
-     * 根据List来创造出cell
+     * 根据List来创造出一行的cell
      */
-    private static void loadCell(Object[] obj, int j, HSSFRow row){
+    private static void createRowCell(Object[] obj, int index, HSSFRow row){
         HSSFCellStyle style = getStyle(workbook);
-        Object temp = obj[j];
-        HSSFCell cell = null;
-        Class result = temp.getClass();
-
-        switch (temp.getClass().getSimpleName()) {
-            case "String":
-                cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
-                cell.setCellValue(obj[j].toString());
-                break;
-            case "Date":
-                cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
-                cell.setCellValue(DateUtil.format(temp));
-                break;
-            case "Boolean":
-                cell = row.createCell(j, HSSFCell.CELL_TYPE_BOOLEAN);
-                cell.setCellValue(Boolean.valueOf(temp.toString()));
-                break;
-            case "Long":
-                cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
-                cell.setCellValue(Long.valueOf(temp.toString()));
-                break;
-            case "Integer":
-                cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
-                cell.setCellValue(Integer.valueOf(temp.toString()));
-                break;
-            case "Float":
-                cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
-                cell.setCellValue(Float.valueOf(temp.toString()));
-                break;
-            case "Double":
-                cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
-                cell.setCellValue(Double.valueOf(temp.toString()));
-                break;
-            default:
-                break;
-        }
+        Object temp = obj[index];
+        HSSFCell cell = handlerMap.get(temp.getClass().getSimpleName()).loadValue(row, index, temp);
         if(cell != null) {
             cell.setCellStyle(style);
         }
     }
-
-
     /**
      * cell分为: 空格 布尔类型(TRUE FALSE) 字符串 数值 | 错误 公式
      * 填充sheet内容
      */
     private static void setContent(List<Object[]> dataList,HSSFSheet sheet){
-
         for (int m = 0; m < dataList.size(); m++) {
             Object[] obj = dataList.get(m);
             HSSFRow row = sheet.createRow(m + mainConfig.getContentStartNum());
             for (int j = 0; j < obj.length; j++) {
-                loadCell(obj, j, row);
+                createRowCell(obj, j, row);
             }
         }
     }

@@ -31,6 +31,7 @@ _2.2 Gradle_
 - 1.Implement Interface:
     - use annotation to define excelSheet column title and Sheet 
     - *Just support String field*
+
 ```java
 @Data
 @ExcelSheet(exportTitle = "雇员表", importTitle = "雇员表")
@@ -54,7 +55,9 @@ public class Employee implements ExcelTransform{
 - 3.Import Excel file
     - `List<Employee> result = ExcelImport.importExcel("/home/kcp/test/employee.xls", Employee.class);`
     
+
 _Excel File_
+
 ![excel.png](https://raw.githubusercontent.com/Kuangcp/ImageRepos/master/Image/mythpoi/excel.png)
 
 ### Word
