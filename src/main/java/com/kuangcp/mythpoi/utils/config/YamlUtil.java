@@ -24,7 +24,6 @@ public class YamlUtil {
         try {
             Yaml.dump(object, dumpFile);
         } catch (FileNotFoundException e) {
-//            e.printStackTrace();
             return false;
         }
         return true;
@@ -42,7 +41,6 @@ public class YamlUtil {
         try {
             return Yaml.loadType(readFile, target);
         } catch (FileNotFoundException e) {
-//            e.printStackTrace();
             return null;
         }
     }

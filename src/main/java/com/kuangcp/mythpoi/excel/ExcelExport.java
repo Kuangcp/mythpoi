@@ -5,7 +5,10 @@ import com.kuangcp.mythpoi.excel.base.MainConfig;
 import com.kuangcp.mythpoi.excel.type.*;
 import com.kuangcp.mythpoi.utils.base.ReadAnnotationUtil;
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.io.File;
@@ -93,14 +96,15 @@ public class ExcelExport {
             //创建列头对应个数的单元格
             HSSFCell cellRowName = row.createCell(n);
             //设置列头单元格的数据类型
-            cellRowName.setCellType(HSSFCell.CELL_TYPE_STRING);
+
+            cellRowName.setCellType(CellType.STRING);
             HSSFRichTextString text = new HSSFRichTextString(metaList.get(n).getTitle());
             cellRowName.setCellValue(text);
             cellRowName.setCellStyle(columnTopStyle);
         }
     }
     /**
-     * 根据List来创造出一行的cell
+     * 根据List来创造出一行的cell, 使用策略模式是因为要从多种的对象类型转换成Excel的特定类型
      */
     private static void createRowCell(Object[] obj, int index, HSSFRow row){
         HSSFCellStyle style = getStyle(workbook);
@@ -141,24 +145,21 @@ public class ExcelExport {
     private static HSSFCellStyle getColumnTopStyle(HSSFWorkbook workbook) {
         HSSFFont font = workbook.createFont();
         font.setFontHeightInPoints((short) 12);
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        font.setBold(true);
         font.setFontName("Courier New");
 
         HSSFCellStyle style = workbook.createCellStyle();
-        style.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
-        style.setBottomBorderColor(HSSFColor.BLACK.index);
-        style.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
-        style.setRightBorderColor(HSSFColor.BLACK.index);
-        style.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
-        style.setTopBorderColor(HSSFColor.BLACK.index);
+        style.setBorderBottom(BorderStyle.MEDIUM);
+        style.setBorderRight(BorderStyle.MEDIUM);
+        style.setBorderTop(BorderStyle.MEDIUM);
 
         style.setFont(font);
         //设置自动换行;
         style.setWrapText(false);
         //设置水平对齐的样式为居中对齐;
-        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        style.setAlignment(HorizontalAlignment.CENTER);
         //设置垂直对齐的样式为居中对齐;
-        style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
         return style;
     }
 
@@ -173,20 +174,17 @@ public class ExcelExport {
 
         HSSFCellStyle style = workbook.createCellStyle();
         // 设置边框风格和颜色
-        style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        style.setBottomBorderColor(HSSFColor.BLACK.index);
-        style.setBorderRight(HSSFCellStyle.BORDER_THIN);
-        style.setRightBorderColor(HSSFColor.BLACK.index);
-        style.setBorderTop(HSSFCellStyle.BORDER_THIN);
-        style.setTopBorderColor(HSSFColor.BLACK.index);
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+        style.setBorderTop(BorderStyle.THIN);
 
         style.setFont(font);
         //设置自动换行;
         style.setWrapText(false);
         //设置水平对齐的样式为居中对齐;
-        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        style.setAlignment(HorizontalAlignment.CENTER);
         //设置垂直对齐的样式为居中对齐;
-        style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
         return style;
     }
 }

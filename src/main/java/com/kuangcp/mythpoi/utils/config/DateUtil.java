@@ -18,7 +18,9 @@ public class DateUtil {
         if(date == null){
             return null;
         }
-        if("".equals(date)) return null;
+        if("".equals(date)){
+            return null;
+        }
         return dateFormat.format(date);
     }
 

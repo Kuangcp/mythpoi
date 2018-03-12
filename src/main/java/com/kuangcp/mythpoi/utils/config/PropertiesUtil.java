@@ -45,6 +45,4 @@ public class PropertiesUtil {
     public double getDouble(String key) {
         return Double.parseDouble(getString(key));
     }
-
-
 }

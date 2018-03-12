@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 切记要导JAR驱动包，还有配置好URL
+ * 切记要导JAR驱动包，还有配置好url
  * @author Myth on 2016年7月24日
+ * 急需优化
  */
 
 public class Mysql{
@@ -16,8 +17,8 @@ public class Mysql{
     private PreparedStatement ps = null;
     private Connection cn = null;
     private ResultSet rs = null;
-    private String Driver;
-    private StringBuilder URL=new StringBuilder();
+    private String driver;
+    private StringBuilder url=new StringBuilder();
 
     /**
      * 手动设置链接数据的属性
@@ -28,50 +29,48 @@ public class Mysql{
      */
     public Mysql(String database,String port,String username,String password){
         PropertiesUtil con = new PropertiesUtil("/mysql.properties");
-        this.Driver = con.getString("Driver");
-        this.URL.append("jdbc:mysql://localhost:").append(port).append("/").append(database).append("?user=")
+        this.driver = con.getString("Driver");
+        this.url.append("jdbc:mysql://localhost:").append(port).append("/").append(database).append("?user=")
                 .append(username).append("&password=").append(password).append("&userUnicode=true&characterEncoding=UTF8");
-//		this.URL="jdbc:mysql://localhost:3306/"+db+"?user="+user+"&password="+pass+"&userUnicode=true&characterEncoding=UTF8";
+//		this.url="jdbc:mysql://localhost:3306/"+db+"?user="+user+"&password="+pass+"&userUnicode=true&characterEncoding=UTF8";
     }
     /**
      * 采用配置文件的默认配置
      */
     public Mysql(){
         PropertiesUtil con = new PropertiesUtil("/mysql.properties");
-        this.Driver = con.getString("Driver");
+        this.driver = con.getString("Driver");
         String database = con.getString("database");
         String username = con.getString("username");
         String password = con.getString("password");
         String port = con.getString("port");
-        this.URL.append("jdbc:mysql://localhost:").append(port).append("/").append(database).append("?user=")
+        this.url.append("jdbc:mysql://localhost:").append(port).append("/").append(database).append("?user=")
                 .append(username).append("&password=").append(password).append("&userUnicode=true&characterEncoding=UTF8");
     }
     /**获取数据库连接*/
     public Connection getConnection(){
         try {
-            Class.forName(Driver);
-            cn = DriverManager.getConnection(URL.toString());
+            Class.forName(driver);
+            cn = DriverManager.getConnection(url.toString());
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("获取连接，异常！");
         }
         return cn;
     }
+    private void loadPreparedStatement(String sql) throws SQLException {
+        ps = cn.prepareStatement(sql);
+    }
 
     /**查询全部的操作 返回值是ResultSet 切记使用完后要finally关闭*/
     public ResultSet queryBySQL(String sql){
         count++;
         try {
-            cn = getConnection();
-            ps=cn.prepareStatement(sql);
+            loadPreparedStatement(sql);
             rs=ps.executeQuery();
         } catch (Exception e) {
             e.printStackTrace();
         }
-//		finally {
-        //不能关闭
-//			this.closeAll();
-//		}
         System.out.println("这是第"+count+"次查询操作");
         return rs;
     }
@@ -81,16 +80,17 @@ public class Mysql{
      * @return List String数组 一行是一个String[] 按查询的字段顺序
      */
     public List<String []> queryReturnList(String sql){
-        int Cols;
-        List <String []> data = new ArrayList<>();
+        int cols;
+        List <String []> data = new ArrayList<>(0);
         ResultSet rs = queryBySQL(sql);
         try {
-            Cols = rs.getMetaData().getColumnCount();//获取总列数
+            //获取总列数
+            cols = rs.getMetaData().getColumnCount();
             while(rs.next()){
                 //为什么放在while外面就会出现最后一组元素覆盖整个数组？
-                String [] row = new String [Cols];
-                for (int i=0;i<Cols;i++){
-                    row[i] = rs.getString(i+1);
+                String [] row = new String [cols];
+                for (int i=0;i<cols;i++){
+                    row[i] = rs.getString(++i);
                 }
                 data.add(row);
             }
@@ -110,8 +110,7 @@ public class Mysql{
     public boolean executeUpdateSQL(String sql){
         boolean flag = true;
         try{
-            cn = getConnection();
-            ps=cn.prepareStatement(sql);
+            loadPreparedStatement(sql);
             int i=ps.executeUpdate();
             System.out.print("    增删改查成功_"+i+"_行受影响-->");
             if(i!=1){
@@ -134,8 +133,8 @@ public class Mysql{
     public boolean batchInsertWithAffair(String [] sqls){
         boolean success = true;
         try{
-            Class.forName(Driver);
-            cn = DriverManager.getConnection(URL.toString());
+            Class.forName(driver);
+            cn = DriverManager.getConnection(url.toString());
             cn.setAutoCommit(false);
             for (int i = 0; i < sqls.length; i++) {
                 ps=cn.prepareStatement(sqls[i]);
@@ -156,7 +155,7 @@ public class Mysql{
             System.out.println("增删改查失败");
         }finally {
             try {
-                cn.setAutoCommit(true);//改回来
+                cn.setAutoCommit(true);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -168,9 +167,15 @@ public class Mysql{
     private void closeAll(){
         //关闭资源 后打开先关闭
         try {
-            if(rs!=null) rs.close();
-            if(ps!=null) ps.close();
-            if(cn!=null) cn.close();
+            if(rs!=null){
+                rs.close();
+            }
+            if(ps!=null){
+                ps.close();
+            }
+            if(cn!=null){
+                cn.close();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("资源关闭异常");

@@ -4,7 +4,6 @@ import com.kuangcp.mythpoi.excel.base.ExcelTransform;
 import com.kuangcp.mythpoi.excel.base.MainConfig;
 import com.kuangcp.mythpoi.excel.util.ExcelUtil;
 import com.kuangcp.mythpoi.utils.base.ReadAnnotationUtil;
-import com.kuangcp.mythpoi.utils.config.DateUtil;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -90,7 +89,9 @@ public class ExcelImport {
         return readExcelSheet(sheetNum, target);
     }
 
-    // TODO 根据标题一一对应,读取多sheet
+    /**
+     *     TODO 根据标题一一对应,读取多sheet
+     */
     private static void readTitle(Sheet sheet){
 
     }
@@ -118,46 +119,16 @@ public class ExcelImport {
 
                     Field colField = ExcelUtil.getOneByTitle(metaList, titleList[i]);
                     colField.setAccessible(true);
-                    String fieldType = colField.getType().getSimpleName();
                     HSSFCell cell = row.getCell(i);
-                    int cellType = cell.getCellType();
-//                    System.out.println(colField.getName()+"|"+fieldType+" | "+cellType);
-                    switch (cellType) {
-                        case HSSFCell.CELL_TYPE_STRING:
-                            if ("Date".equals(fieldType)) {
-                                colField.set(obj, DateUtil.parse(cell.getStringCellValue()));
-                            } else {
-                                colField.set(obj, cell.getStringCellValue());
-                            }
-                            break;
-                        case HSSFCell.CELL_TYPE_BLANK:
-                            System.out.println("字段" + colField.getName());
-                            if ("Boolean".equals(fieldType)) {
-                                colField.set(obj, cell.getBooleanCellValue());
-                            } else {
-                                colField.set(obj, "");
-                            }
-                            break;
-                        case HSSFCell.CELL_TYPE_NUMERIC:
-                            if ("Integer".equals(fieldType) || "int".equals(fieldType)) {
-                                colField.set(obj, (int) cell.getNumericCellValue());
-                            }else if ("Long".equals(fieldType) || "long".equals(fieldType)) {
-                                colField.set(obj, (long) cell.getNumericCellValue());
-                            }else {
-                                colField.set(obj, cell.getNumericCellValue());
-                            }
-                            break;
-                        case HSSFCell.CELL_TYPE_BOOLEAN:
-                            colField.set(obj, cell.getBooleanCellValue());
-                            break;
-                        default:
-                            break;
+                    try {
+                        ExcelUtil.invokeValue(cell.getCellTypeEnum(), colField, obj, cell);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
-
                 }
                 result.add(obj);
             }
-        } catch (InstantiationException | IllegalAccessException | ParseException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return result;

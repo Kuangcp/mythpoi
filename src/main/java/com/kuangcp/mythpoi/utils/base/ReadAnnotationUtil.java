@@ -7,7 +7,6 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,7 +26,9 @@ public class ReadAnnotationUtil {
      */
     public static String getSheetTitle(Class<? extends ExcelTransform> target, boolean export) {
         ExcelSheet excelSheet = target.getAnnotation(ExcelSheet.class);
-        if (excelSheet == null) return " ";
+        if (excelSheet == null){
+            return " ";
+        }
         if (export) {
             return excelSheet.exportTitle();
         }
@@ -88,7 +89,6 @@ public class ReadAnnotationUtil {
             }
             dataList.add(line);
         }
-//        dataList.forEach(item -> System.out.println(Arrays.toString(item)));
         return dataList;
     }
 }
