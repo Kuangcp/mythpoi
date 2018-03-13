@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 切记要导JAR驱动包，还有配置好url
  * @author Myth on 2016年7月24日
- * 急需优化
+ * TODO 配置文件的外化 YML
  */
 
 public class Mysql{
@@ -18,36 +18,28 @@ public class Mysql{
     private Connection cn = null;
     private ResultSet rs = null;
     private String driver;
-    private StringBuilder url=new StringBuilder();
+    private StringBuilder url = new StringBuilder();
 
     /**
      * 手动设置链接数据的属性
-     * @param database 数据库
-     * @param username 用户
-     * @param port 端口号
-     * @param password 密码
      */
-    public Mysql(String database,String port,String username,String password){
-        PropertiesUtil con = new PropertiesUtil("/mysql.properties");
-        this.driver = con.getString("Driver");
-        this.url.append("jdbc:mysql://localhost:").append(port).append("/").append(database).append("?user=")
-                .append(username).append("&password=").append(password).append("&userUnicode=true&characterEncoding=UTF8");
-//		this.url="jdbc:mysql://localhost:3306/"+db+"?user="+user+"&password="+pass+"&userUnicode=true&characterEncoding=UTF8";
+    public Mysql(BaseConfig config){
+        this.driver = config.getDriver();
+        this.url.append("jdbc:mysql://").append(config.getHost()).append(":").append(config.getPort())
+                .append("/").append(config.getDatabase()).append("?user=")
+                .append(config.getUsername()).append("&password=").append(config.getPassword())
+                .append("&userUnicode=true&characterEncoding=UTF8");
     }
     /**
-     * 采用配置文件的默认配置
+     * 采用默认配置文件作为默认配置
      */
     public Mysql(){
-        PropertiesUtil con = new PropertiesUtil("/mysql.properties");
-        this.driver = con.getString("Driver");
-        String database = con.getString("database");
-        String username = con.getString("username");
-        String password = con.getString("password");
-        String port = con.getString("port");
-        this.url.append("jdbc:mysql://localhost:").append(port).append("/").append(database).append("?user=")
-                .append(username).append("&password=").append(password).append("&userUnicode=true&characterEncoding=UTF8");
+        this(BaseConfig.initByYaml());
     }
-    /**获取数据库连接*/
+
+    /**根据参数获取数据库连接对象
+     * @return Connection 连接
+     */
     public Connection getConnection(){
         try {
             Class.forName(driver);

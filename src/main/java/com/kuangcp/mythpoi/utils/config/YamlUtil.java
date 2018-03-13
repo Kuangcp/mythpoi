@@ -14,7 +14,7 @@ public class YamlUtil {
 
     /**
      * TODO 项目根目录问题, 为什么是项目的上级目录???
-     * @param object  对象
+     * @param object  对象  对象的定义切记要有setget, 而且不能重载这些方法, 不然就会稀奇古怪的错误
      * @param filePath 绝对路径,目前存在问题
      * @return true 创建成功
      */
@@ -22,8 +22,10 @@ public class YamlUtil {
         File dumpFile=new File(filePath);
         System.out.println("配置文件绝对路径: "+dumpFile.getAbsolutePath());
         try {
+            System.out.println(Yaml.dump(object));
             Yaml.dump(object, dumpFile);
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
             return false;
         }
         return true;

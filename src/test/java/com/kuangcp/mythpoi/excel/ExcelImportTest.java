@@ -19,7 +19,7 @@ import java.util.Map;
  * @author kuangcp
  */
 public class ExcelImportTest {
-    private static MainConfig mainConfig = MainConfig.getInstance();
+//    private static MainConfig mainConfig = MainConfig.getInstance();
 
     @Test
     public void testImportExcel(){
