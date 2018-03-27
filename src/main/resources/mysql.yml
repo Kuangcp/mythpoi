@@ -1,6 +1,5 @@
 --- !com.kuangcp.mythpoi.utils.db.BaseConfig
 database: test
-driver: com.mysql.jdbc.Driver
 host: localhost
 password: ad
 port: 3306

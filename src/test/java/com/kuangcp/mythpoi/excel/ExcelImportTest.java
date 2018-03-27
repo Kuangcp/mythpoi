@@ -4,6 +4,7 @@ import com.kuangcp.mythpoi.excel.base.ExcelTransform;
 import com.kuangcp.mythpoi.excel.base.MainConfig;
 import com.kuangcp.mythpoi.utils.Employee;
 import com.kuangcp.mythpoi.utils.config.DateUtil;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.sql.rowset.spi.SyncResolver;
@@ -22,6 +23,7 @@ public class ExcelImportTest {
 //    private static MainConfig mainConfig = MainConfig.getInstance();
 
     @Test
+    @Ignore
     public void testImportExcel(){
 //        ExcelImport excelImport = new ExcelImport<Employee>();
         // TODO 接收对应类型
@@ -37,16 +39,5 @@ public class ExcelImportTest {
 
     }
 
-    @Test
-    public void testType(){
-//        Boolean a;
-//        boolean b;
-//        int c;
-//        double d;
-//        System.out.println(d);
-//        System.out.println(c);
-//        System.out.println(a);
-//        System.out.println(b);
-    }
 }
 

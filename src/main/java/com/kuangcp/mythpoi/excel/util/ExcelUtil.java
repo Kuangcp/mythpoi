@@ -3,7 +3,6 @@ package com.kuangcp.mythpoi.excel.util;
 import com.kuangcp.mythpoi.excel.ExcelCellMeta;
 import com.kuangcp.mythpoi.utils.config.DateUtil;
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 
 import java.lang.reflect.Field;

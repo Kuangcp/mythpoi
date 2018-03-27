@@ -1,7 +1,5 @@
 package com.kuangcp.mythpoi.utils.db;
 
-import com.kuangcp.mythpoi.utils.config.PropertiesUtil;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +49,7 @@ public class Mysql{
         return cn;
     }
     private void loadPreparedStatement(String sql) throws SQLException {
+        getConnection();
         ps = cn.prepareStatement(sql);
     }
 

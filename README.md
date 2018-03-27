@@ -26,6 +26,19 @@ _2.2 Gradle_
 ```groovy
     compile("com.github.kuangcp:myth-poi:0.2.3-SNAPSHOT")
 ```
+***************************
+## Use Gitee Repository
+### Gradle 
+```groovy
+repositories {
+    maven{
+        url "https://gitee.com/kcp1104/MavenRepos/raw/master"
+    }
+} 
+```
+- add `compile "com.github.kuangcp:mythpoi:0.2.3-SNAPSHOT"`   
+
+********************
 ## How to use
 ### Excel 
 - 1.Implement Interface:

@@ -22,6 +22,7 @@ public class BaseConfig {
         BaseConfig config =  YamlUtil.readFile(BaseConfig.class, "src/main/resources/mysql.yml");
         return config==null?new BaseConfig():config;
     }
+
     public BaseConfig initDriver(String driver) {
         this.driver = driver;
         return this;
