@@ -6,13 +6,22 @@
 [![codebeat badge](https://codebeat.co/badges/ab5fad57-0c61-49f6-a5ec-eb975b9d5c66)](https://codebeat.co/projects/github-com-kuangcp-mythpoi-master)
 [![Java Version](https://img.shields.io/badge/Java-JRE%208-red.svg)](https://www.java.com/download/)
 
-## How to install
-
+## 1. How to install
+### Build
 - 1.Clone this Repo And install 
     - `git clone https://github.com/Kuangcp/mythpoi.git`
     - `cd mythpoi && gradle install`
 
-- 2.Add Dependency  
+### Use Gitee Repository
+#### Gradle 
+```groovy
+repositories {
+    maven{
+        url "https://gitee.com/kcp1104/MavenRepos/raw/master"
+    }
+} 
+```
+## 2. Add Dependency
 
 _2.1 Maven_
 ```xml
@@ -26,24 +35,13 @@ _2.2 Gradle_
 ```groovy
     compile("com.github.kuangcp:myth-poi:0.2.3-SNAPSHOT")
 ```
-***************************
-## Use Gitee Repository
-### Gradle 
-```groovy
-repositories {
-    maven{
-        url "https://gitee.com/kcp1104/MavenRepos/raw/master"
-    }
-} 
-```
-- add `compile "com.github.kuangcp:mythpoi:0.2.3-SNAPSHOT"`   
 
 ********************
-## How to use
+## 3. How to use
 ### Excel 
 - 1.Implement Interface:
     - use annotation to define excelSheet column title and Sheet 
-    - *Just support String field*
+    - *Just support BaseType field*
 
 ```java
 @Data
@@ -56,14 +54,17 @@ public class Employee implements ExcelTransform{
     
     // not export this field
     @ExcelConfig(value = "QQ号码", exportFlag = false)
-    private Strign qq;
+    private String qq;
 }
 ```
 
 **********
 - 2.Export Excel file  
-    - `ExcelExport.exportExcel("/home/kcp/test/employee.xls", originList);`
-    - `originList` is a Employee List   
+```
+	List<Employee> originList = new ArrayList<>();
+	// add some Employee Object ...
+    ExcelExport.exportExcel("/home/kcp/test/employee.xls", originList);
+```
 
 - 3.Import Excel file
     - `List<Employee> result = ExcelImport.importExcel("/home/kcp/test/employee.xls", Employee.class);`
