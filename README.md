@@ -7,12 +7,12 @@
 [![Java Version](https://img.shields.io/badge/Java-JRE%208-red.svg)](https://www.java.com/download/)
 
 ## 1. How to install
-### Build
-- 1.Clone this Repo And install 
+### A way: Build
+- Clone this Repo And install 
     - `git clone https://github.com/Kuangcp/mythpoi.git`
     - `cd mythpoi && gradle install`
 
-### Use Gitee Repository
+### Another way: Use gitee repository
 #### Gradle 
 ```groovy
 repositories {
@@ -21,6 +21,9 @@ repositories {
     }
 } 
 ```
+#### Maven 
+
+************
 ## 2. Add Dependency
 
 _2.1 Maven_
@@ -57,20 +60,19 @@ public class Employee implements ExcelTransform{
     private String qq;
 }
 ```
-
-**********
 - 2.Export Excel file  
-```
-	List<Employee> originList = new ArrayList<>();
-	// add some Employee Object ...
-    ExcelExport.exportExcel("/home/kcp/test/employee.xls", originList);
+```java
+List<Employee> originList = new ArrayList<>();
+// add some Employee Object ...
+ExcelExport.exportExcel("/home/kcp/test/employee.xls", originList);
 ```
 
 - 3.Import Excel file
-    - `List<Employee> result = ExcelImport.importExcel("/home/kcp/test/employee.xls", Employee.class);`
-    
+```java
+List<Employee> result = ExcelImport.importExcel("/home/kcp/test/employee.xls", Employee.class);
+```
 
-_Excel File_
+_Excel File :_
 
 ![excel.png](https://raw.githubusercontent.com/Kuangcp/ImageRepos/master/Image/mythpoi/excel.png)
 

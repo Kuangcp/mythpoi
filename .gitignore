@@ -13,8 +13,9 @@ bin/
 .project
 Servers/
 
+# Gradle #
 .gradle/
-
 out/
 build/
+
 publish/
