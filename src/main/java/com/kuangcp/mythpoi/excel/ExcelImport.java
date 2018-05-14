@@ -13,6 +13,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -46,11 +47,11 @@ public class ExcelImport {
 
     /**
      * 根据Excel文件输入流 将Excel转换成对象集合,只读第一个Sheet
-     * @param input FileInputStream 输入流
+     * @param input InputStream 输入流
      * @param target 实体类
      * @return List集合, 或者Null
      */
-    public static <T extends ExcelTransform> List importExcel(FileInputStream input, Class<T> target) {
+    public static <T extends ExcelTransform> List importExcel(InputStream input, Class<T> target) {
         return importExcel(input, target, 0);
     }
 
@@ -74,12 +75,12 @@ public class ExcelImport {
 
     /**
      * 根据Excel文件输入流 将Excel转换成对象集合
-     * @param input FileInputStream 输入流
+     * @param input InputStream 输入流
      * @param target 实体类
      * @param sheetNum Sheet标号 0开始
      * @return List集合, 或者Null
      */
-    public static <T extends ExcelTransform> List<T> importExcel(FileInputStream input, Class<T> target, int sheetNum) {
+    public static <T extends ExcelTransform> List<T> importExcel(InputStream input, Class<T> target, int sheetNum) {
         try {
             POIFSFileSystem fs = new POIFSFileSystem(input);
             wb = new HSSFWorkbook(fs);

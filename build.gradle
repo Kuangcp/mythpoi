@@ -1,5 +1,5 @@
-group 'com.github.kuangcp'
-version '0.2.3-SNAPSHOT'
+group='com.github.kuangcp'
+version='0.2.3-SNAPSHOT'
 
 apply plugin: "maven"
 apply plugin: 'java'
