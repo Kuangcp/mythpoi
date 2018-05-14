@@ -31,12 +31,12 @@ _2.1 Maven_
     <dependency>
         <groupId>com.github.kuangcp</groupId>
         <artifactId>myth-poi</artifactId>
-        <version>0.2.3-SNAPSHOT</version>
+        <version>0.2.4-SNAPSHOT</version>
     </dependency>
 ```
 _2.2 Gradle_
 ```groovy
-    compile("com.github.kuangcp:myth-poi:0.2.3-SNAPSHOT")
+    compile("com.github.kuangcp:myth-poi:0.2.4-SNAPSHOT")
 ```
 
 ********************

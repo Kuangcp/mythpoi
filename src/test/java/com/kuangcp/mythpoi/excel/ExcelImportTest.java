@@ -8,6 +8,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.sql.rowset.spi.SyncResolver;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +40,16 @@ public class ExcelImportTest {
 
         });
 
+    }
+
+    @Ignore
+    @Test
+    public void testStreamImport() throws FileNotFoundException {
+        FileInputStream inputStream = new FileInputStream("/home/kcp/test/employee.xls");
+        List<Employee> result = ExcelImport.importExcel(inputStream, Employee.class);
+        result.forEach(item -> {
+            System.out.println(item.toString());
+        });
     }
 
 }

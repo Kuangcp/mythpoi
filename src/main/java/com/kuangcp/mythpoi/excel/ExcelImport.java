@@ -4,6 +4,8 @@ import com.kuangcp.mythpoi.excel.base.ExcelTransform;
 import com.kuangcp.mythpoi.excel.base.MainConfig;
 import com.kuangcp.mythpoi.excel.util.ExcelUtil;
 import com.kuangcp.mythpoi.utils.base.ReadAnnotationUtil;
+import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -51,7 +53,7 @@ public class ExcelImport {
      * @param target 实体类
      * @return List集合, 或者Null
      */
-    public static <T extends ExcelTransform> List importExcel(InputStream input, Class<T> target) {
+    public static <T extends ExcelTransform> List<T> importExcel(InputStream input, Class<T> target) {
         return importExcel(input, target, 0);
     }
 
@@ -80,12 +82,19 @@ public class ExcelImport {
      * @param sheetNum Sheet标号 0开始
      * @return List集合, 或者Null
      */
-    public static <T extends ExcelTransform> List<T> importExcel(InputStream input, Class<T> target, int sheetNum) {
+    private static <T extends ExcelTransform> List<T> importExcel(InputStream input, Class<T> target, int sheetNum) {
         try {
             POIFSFileSystem fs = new POIFSFileSystem(input);
             wb = new HSSFWorkbook(fs);
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                input.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("文件关闭失败"+e.getMessage());
+            }
         }
         return readExcelSheet(sheetNum, target);
     }
@@ -117,7 +126,6 @@ public class ExcelImport {
                 row = sheet.getRow(j);
                 T obj = target.newInstance();
                 for (int i = 0; i < colNum; i++) {
-
                     Field colField = ExcelUtil.getOneByTitle(metaList, titleList[i]);
                     colField.setAccessible(true);
                     HSSFCell cell = row.getCell(i);
