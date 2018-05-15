@@ -1,7 +1,6 @@
 package com.kuangcp.mythpoi.utils.config;
 
 import com.fasterxml.jackson.core.JsonEncoding;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
@@ -9,10 +8,8 @@ import com.kuangcp.mythpoi.excel.base.MainConfig;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by https://github.com/kuangcp
@@ -33,11 +30,13 @@ public class JacksonYamlTest {
         config.setStartColNum(1);
         config.setTitleTotalNum(3);
         config.setStartRowNum(1);
-        String result = mapper.writeValueAsString(config);
+        // 保存到文件中
         factory.setCodec(mapper);
         YAMLGenerator generator = factory.createGenerator(new FileOutputStream("/home/kcp/test/user.yml"), JsonEncoding.UTF8);
         generator.useDefaultPrettyPrinter();
         generator.writeObject(config);
+        // 输出
+        String result = mapper.writeValueAsString(config);
         System.out.println(result);
     }
 

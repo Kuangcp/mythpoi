@@ -3,6 +3,7 @@ package com.kuangcp.mythpoi.utils.config;
 import com.kuangcp.mythpoi.excel.base.MainConfig;
 import com.kuangcp.mythpoi.utils.db.BaseConfig;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -10,8 +11,10 @@ import org.junit.Test;
  * yml 配置文件的读写
  * @author kuangcp
  */
+@Ignore
 public class YamlUtilTest {
 
+    private String path = "src/main/resources/excel.main.yml";
     // 生成配置文件
     @Test
     public void testCreateFile() throws Exception {
@@ -21,14 +24,15 @@ public class YamlUtilTest {
         config.setStartColNum(1);
         config.setTitleTotalNum(3);
         config.setStartRowNum(1);
-
-        boolean result = YamlUtil.createFile(config, "src/main/resources/excel.main.yml");
-        Assert.assertEquals(true, result);
+        System.out.println(path);
+        boolean result = YamlUtil.createFile(config, path);
+        Assert.assertTrue(result);
     }
     // 测试读取配置文件
     @Test
     public void testRead() {
-        MainConfig con = YamlUtil.readFile(MainConfig.class, "src/main/resources/excel.main.yml");
+        MainConfig con = YamlUtil.readFile(MainConfig.class, path);
+        assert con != null;
         System.out.println(con.toString());
     }
 
@@ -39,12 +43,13 @@ public class YamlUtilTest {
                 .initHost("localhost").initPort(3306)
                 .initUsername("myth").initPassword("ad");
         System.out.println(config.toString());
-        YamlUtil.createFile(config, "src/main/resources/mysql.yml");
+        YamlUtil.createFile(config, path);
     }
 
     @Test
     public void testReadM(){
-        BaseConfig baseConfig = YamlUtil.readFile(BaseConfig.class, "src/main/resources/mysql.yml");
+        BaseConfig baseConfig = YamlUtil.readFile(BaseConfig.class, path);
+        assert baseConfig != null;
         System.out.println(baseConfig.toString());
     }
 }

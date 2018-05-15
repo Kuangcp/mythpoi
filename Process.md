@@ -3,6 +3,10 @@
 
 # 记录
 
+## 2018-05-15 16:24:09
+- 将导入的方法接口采用父类InputStream而不是具体的实现类FileInputStream
+- 更改yaml的操作库为jackson, 和常用的SpringBoot框架保持一致
+
 ## 2018-03-12 23:14:17
 - 将POI更新到3.17
 
