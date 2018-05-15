@@ -39,6 +39,13 @@ _2.2 Gradle_
     compile("com.github.kuangcp:myth-poi:0.2.4-SNAPSHOT")
 ```
 
+_2.3 Jar_
+Download About Jar
+
+http://mvnrepository.com/artifact/org.jyaml/jyaml  
+http://mvnrepository.com/artifact/org.apache.poi/poi  
+https://gitee.com/kcp1104/MavenRepos/tree/master/com/github/kuangcp/myth-poi  
+
 ********************
 ## 3. How to use
 ### Excel 
