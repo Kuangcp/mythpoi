@@ -10,6 +10,6 @@ import org.junit.Test;
 public class MainConfigTest {
     @Test
     public void testRead(){
-        System.out.println(MainConfig.getInstance().toString());;
+        System.out.println(MainConfig.getInstance().toString());
     }
 }

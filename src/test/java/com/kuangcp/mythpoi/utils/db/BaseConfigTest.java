@@ -1,6 +1,5 @@
 package com.kuangcp.mythpoi.utils.db;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -11,8 +10,8 @@ import org.junit.Test;
 public class BaseConfigTest {
 
     @Test
-    public void testInitByYaml() throws Exception {
+    public void testInitByYml() throws Exception {
         BaseConfig result = BaseConfig.initByYaml();
-        System.out.println(result.toString());
+        System.out.println("读取配置结果 "+result.toString());
     }
 }
