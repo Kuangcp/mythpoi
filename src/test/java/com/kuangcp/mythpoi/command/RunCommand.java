@@ -2,6 +2,7 @@ package com.kuangcp.mythpoi.command;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -32,7 +33,6 @@ public class RunCommand {
       System.out.println(sb.toString());
     } catch (Exception e) {
       e.printStackTrace();
-
     }
   }
 
