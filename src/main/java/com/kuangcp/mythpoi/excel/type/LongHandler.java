@@ -10,10 +10,11 @@ import org.apache.poi.ss.usermodel.CellType;
  * @author kuangcp
  */
 public class LongHandler implements LoadCellValue {
-    @Override
-    public HSSFCell loadValue(HSSFRow row, int index, Object value) {
-        HSSFCell cell = row.createCell(index, CellType.NUMERIC);
-        cell.setCellValue(Long.valueOf(value.toString()));
-        return cell;
-    }
+
+  @Override
+  public HSSFCell loadValue(HSSFRow row, int index, Object value) {
+    HSSFCell cell = row.createCell(index, CellType.NUMERIC);
+    cell.setCellValue(Long.valueOf(value.toString()));
+    return cell;
+  }
 }

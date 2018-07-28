@@ -38,7 +38,7 @@ public class MainConfig {
           // TODO 测试该方式
           ClassLoader classLoader = MainConfig.class.getClassLoader();
           URL resource = classLoader.getResource(ExternalConfig.EXCEL_DATA_FORMAT_CONFIG);
-          if(resource != null) {
+          if (resource != null) {
             String path = resource.getPath();
             mainConfig = YamlUtil.readFile(MainConfig.class, path);
           }

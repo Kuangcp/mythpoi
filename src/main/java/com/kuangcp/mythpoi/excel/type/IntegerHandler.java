@@ -9,12 +9,12 @@ import org.apache.poi.ss.usermodel.CellType;
  *
  * @author kuangcp
  */
-public class IntegerHandler implements LoadCellValue{
+public class IntegerHandler implements LoadCellValue {
 
-    @Override
-    public HSSFCell loadValue(HSSFRow row, int index, Object value) {
-        HSSFCell cell = row.createCell(index, CellType.NUMERIC);
-        cell.setCellValue(Integer.valueOf(value.toString()));
-        return cell;
-    }
+  @Override
+  public HSSFCell loadValue(HSSFRow row, int index, Object value) {
+    HSSFCell cell = row.createCell(index, CellType.NUMERIC);
+    cell.setCellValue(Integer.valueOf(value.toString()));
+    return cell;
+  }
 }

@@ -20,69 +20,70 @@ import java.util.List;
  */
 public class ExcelExportTest {
 
-    private List<Employee> originList = new ArrayList<>(0);
+  private List<Employee> originList = new ArrayList<>(0);
 
-    @Before
-    public void init(){
-        Employee e1 = new Employee();
-        e1.setQQ("QQ1");
-        e1.setNames("Name1");
-        e1.setPhone("Phone1");
-        e1.setSex("sex1");
-        e1.setEmail("email");
-        e1.setBirth(new Date());
-        e1.setDeath(true);
+  @Before
+  public void init() {
+    Employee e1 = new Employee();
+    e1.setQQ("QQ1");
+    e1.setNames("Name1");
+    e1.setPhone("Phone1");
+    e1.setSex("sex1");
+    e1.setEmail("email");
+    e1.setBirth(new Date());
+    e1.setDeath(true);
 //        e1.setAge(1212);
-        e1.setScore(12.1);
-        e1.setDeath(false);
+    e1.setScore(12.1);
+    e1.setDeath(false);
 
-        Employee e2 = new Employee();
+    Employee e2 = new Employee();
 //        e2.setNames("name2");
-        e2.setPhone("phone2");
-        e2.setSex("sex2");
-        e2.setQQ("QQ2");
-        e2.setDeath(false);
-        e2.setBirth(new Date());
+    e2.setPhone("phone2");
+    e2.setSex("sex2");
+    e2.setQQ("QQ2");
+    e2.setDeath(false);
+    e2.setBirth(new Date());
 
-        Employee e3 = new Employee();
-        e3.setNames("name2");
-        e3.setPhone("phone2");
-        e3.setSex("sex2");
-        e3.setQQ("QQ2");
-        e3.setBirth(new Date());
-        e3.setDeath(false);
+    Employee e3 = new Employee();
+    e3.setNames("name2");
+    e3.setPhone("phone2");
+    e3.setSex("sex2");
+    e3.setQQ("QQ2");
+    e3.setBirth(new Date());
+    e3.setDeath(false);
 
-        originList.add(e1);
-        originList.add(e2);
-        originList.add(e3);
-    }
+    originList.add(e1);
+    originList.add(e2);
+    originList.add(e3);
+  }
 
-    @Test
-    public void testExports(){
-        Boolean results = ExcelExport.exportExcel("/home/kcp/test/employee.xls", originList);
-        assert results;
-    }
+  @Test
+  public void testExports() {
+    boolean results = ExcelExport.exportExcel("/home/kcp/test/employee.xls", originList);
+    assert results;
+  }
 
-    @Test
-    public void testOut(){
-        File f = new File("/home/kcp/test/employee.xls");
-        OutputStream out = null;
-        try {
-            out = new FileOutputStream(f);
-        } catch (FileNotFoundException e11) {
-            e11.printStackTrace();
-        }
-        ExcelExport.exportExcel(out, originList);
+  @Test
+  public void testOut() {
+    File f = new File("/home/kcp/test/employee.xls");
+    OutputStream out = null;
+    try {
+      out = new FileOutputStream(f);
+    } catch (FileNotFoundException e11) {
+      e11.printStackTrace();
     }
-    @Test
-    public void testGetContentByList() throws Exception {
-        List<Object[]> result = ReadAnnotationUtil.getContentByList(Employee.class, originList);
-        for(Object [] temp: result){
-            for(Object l : temp){
-                System.out.print(l.toString());
-            }
-            System.out.println();
-        }
+    ExcelExport.exportExcel(out, originList);
+  }
+
+  @Test
+  public void testGetContentByList() throws Exception {
+    List<Object[]> result = ReadAnnotationUtil.getContentByList(Employee.class, originList);
+    for (Object[] temp : result) {
+      for (Object l : temp) {
+        System.out.print(l.toString());
+      }
+      System.out.println();
     }
+  }
 
 }

@@ -2,7 +2,6 @@ package com.kuangcp.mythpoi.command;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -20,7 +19,6 @@ public class RunCommand {
     String[] arguments = new String[]{"dash",
         "/home/kcp/Application/Script/shell/check_by_aliases.sh"};
     try {
-      //核心
       Runtime runtime = Runtime.getRuntime();
       runtime.exec(arguments);
       Process process = Runtime.getRuntime().exec(arguments);
@@ -28,7 +26,7 @@ public class RunCommand {
       StringBuilder sb = new StringBuilder();
       String line;
       while ((line = in.readLine()) != null) {
-        sb.append(line + "\n");
+        sb.append(line).append("\n");
       }
       System.out.println(sb.toString());
     } catch (Exception e) {
@@ -37,7 +35,7 @@ public class RunCommand {
   }
 
   @Test
-  public void testLog(){
+  public void testLog() {
     log.debug("测试Logback");
   }
 }

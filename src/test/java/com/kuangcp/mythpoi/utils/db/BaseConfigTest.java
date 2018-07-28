@@ -9,9 +9,9 @@ import org.junit.Test;
  */
 public class BaseConfigTest {
 
-    @Test
-    public void testInitByYml() throws Exception {
-        BaseConfig result = BaseConfig.initByYaml();
-        System.out.println("读取配置结果 "+result.toString());
-    }
+  @Test
+  public void testInitByYml() throws Exception {
+    BaseConfig result = BaseConfig.initByYaml();
+    System.out.println("读取配置结果 " + result.toString());
+  }
 }

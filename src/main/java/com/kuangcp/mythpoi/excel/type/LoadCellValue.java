@@ -9,12 +9,14 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
  * @author kuangcp
  */
 public interface LoadCellValue {
-    /**
-     * 创建row的cell, 根据传入的String值
-     * @param row  HSSFRow
-     * @param index cell的下标0开始
-     * @param value 装载的值
-     * @return  HSSFCell 单元格对象
-     */
-    HSSFCell loadValue(HSSFRow row, int index, Object value);
+
+  /**
+   * 创建row的cell, 根据传入的String值
+   *
+   * @param row HSSFRow
+   * @param index cell的下标0开始
+   * @param value 装载的值
+   * @return HSSFCell 单元格对象
+   */
+  HSSFCell loadValue(HSSFRow row, int index, Object value);
 }

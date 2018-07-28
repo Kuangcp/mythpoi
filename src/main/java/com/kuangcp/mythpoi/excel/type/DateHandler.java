@@ -10,11 +10,12 @@ import org.apache.poi.ss.usermodel.CellType;
  *
  * @author kuangcp
  */
-public class DateHandler implements LoadCellValue{
-    @Override
-    public HSSFCell loadValue(HSSFRow row, int index, Object value) {
-        HSSFCell cell = row.createCell(index, CellType.STRING);
-        cell.setCellValue(DateUtil.format(value));
-        return cell;
-    }
+public class DateHandler implements LoadCellValue {
+
+  @Override
+  public HSSFCell loadValue(HSSFRow row, int index, Object value) {
+    HSSFCell cell = row.createCell(index, CellType.STRING);
+    cell.setCellValue(DateUtil.format(value));
+    return cell;
+  }
 }

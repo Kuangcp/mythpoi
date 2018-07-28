@@ -8,8 +8,9 @@ import org.junit.Test;
  * @author kuangcp
  */
 public class MainConfigTest {
-    @Test
-    public void testRead(){
-        System.out.println(MainConfig.getInstance().toString());
-    }
+
+  @Test
+  public void testRead() {
+    System.out.println(MainConfig.getInstance().toString());
+  }
 }

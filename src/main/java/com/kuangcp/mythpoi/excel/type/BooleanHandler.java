@@ -9,12 +9,13 @@ import org.apache.poi.ss.usermodel.CellType;
  *
  * @author kuangcp
  */
-public class BooleanHandler implements LoadCellValue{
-    @Override
-    public HSSFCell loadValue(HSSFRow row, int index, Object value) {
+public class BooleanHandler implements LoadCellValue {
 
-        HSSFCell cell = row.createCell(index, CellType.BOOLEAN);
-        cell.setCellValue(Boolean.valueOf(value.toString()));
-        return cell;
-    }
+  @Override
+  public HSSFCell loadValue(HSSFRow row, int index, Object value) {
+
+    HSSFCell cell = row.createCell(index, CellType.BOOLEAN);
+    cell.setCellValue(Boolean.valueOf(value.toString()));
+    return cell;
+  }
 }

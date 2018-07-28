@@ -17,5 +17,5 @@ Servers/
 .gradle/
 out/
 build/
-
+.gradletasknamecache
 publish/
