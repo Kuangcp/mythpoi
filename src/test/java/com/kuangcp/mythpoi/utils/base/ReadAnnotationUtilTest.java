@@ -32,7 +32,7 @@ public class ReadAnnotationUtilTest {
     e2.setSex("sex2");
     e2.setQQ("QQ2");
     e2.setBirth(new Date());
-    List<Employee> originList = new ArrayList<>(0);
+    List<Employee> originList = new ArrayList<>();
     originList.add(e1);
     originList.add(e2);
     List<Object[]> result = ReadAnnotationUtil.getContentByList(Employee.class, originList);

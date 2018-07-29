@@ -4,7 +4,12 @@ import com.kuangcp.mythpoi.excel.base.ExcelTransform;
 import com.kuangcp.mythpoi.excel.base.MainConfig;
 import com.kuangcp.mythpoi.excel.util.ExcelUtil;
 import com.kuangcp.mythpoi.utils.base.ReadAnnotationUtil;
-import lombok.extern.log4j.Log4j2;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -12,14 +17,6 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Sheet;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by https://github.com/kuangcp on 18-2-23  下午9:52
@@ -103,7 +100,7 @@ public class ExcelImport {
         log.error("file import failed : error", e);
       }
     }
-    return readExcelSheet(sheetNum, target);
+    return readExcelSheetContent(sheetNum, target);
   }
 
   /**
@@ -119,32 +116,34 @@ public class ExcelImport {
    * @param sheetNum sheet标号 0开始
    * @return 数据集合对象
    */
-  private static <T extends ExcelTransform> List<T> readExcelSheet(int sheetNum, Class<T> target) {
-    List<T> result = new ArrayList<>(0);
+  private static <T extends ExcelTransform> List<T> readExcelSheetContent(int sheetNum,
+      Class<T> target) {
+    List<T> result = new ArrayList<>();
     List<ExcelCellMeta> metaList = ReadAnnotationUtil.getCellMetaData(target);
     HSSFSheet sheet = wb.getSheetAt(sheetNum);
     int rowNum = sheet.getLastRowNum();
-    // 0 是标题 1 NPE? 2标题行
-    HSSFRow row = sheet.getRow(mainConfig.getTitleTotalNum());
+    HSSFRow row = sheet.getRow(mainConfig.getTitleLastRowNum());
     int colNum = row.getPhysicalNumberOfCells();
+
     log.info("read excel : rowNum={}, colNum={}", rowNum, colNum);
-    String[] titleList = map(colNum, row, metaList);
-    // 只要有一行实例化出了问题, 就说明整个Sheet对应的实体类都有问题, 就没必要循环下去了
+
+    String[] titleList = mapFieldAndTitle(colNum, row, metaList);
+
     try {
       for (int j = mainConfig.getContentStartNum(); j <= rowNum; j++) {
         row = sheet.getRow(j);
-        T obj = target.newInstance();
+        T cellValue = target.newInstance();
         for (int i = 0; i < colNum; i++) {
-          Field colField = ExcelUtil.getOneByTitle(metaList, titleList[i]);
+          Field colField = ExcelUtil.getColFieldByTitle(metaList, titleList[i]);
           colField.setAccessible(true);
           HSSFCell cell = row.getCell(i);
           try {
-            ExcelUtil.invokeValue(cell.getCellTypeEnum(), colField, obj, cell);
-          } catch (ParseException e) {
-            e.printStackTrace();
+            ExcelUtil.loadCellValue(cell.getCellTypeEnum(), colField, cellValue, cell);
+          } catch (Exception e) {
+            log.error("load cell value error", e);
           }
         }
-        result.add(obj);
+        result.add(cellValue);
       }
     } catch (InstantiationException | IllegalAccessException e) {
       log.error("read excel error", e);
@@ -155,7 +154,8 @@ public class ExcelImport {
   /**
    * 将属性和Excel列标题对应起来,这样的写法就能够保证Excel的列顺序混乱也不影响导入
    */
-  private static String[] map(int colNum, HSSFRow row, List<ExcelCellMeta> metaList) {
+  private static String[] mapFieldAndTitle(int colNum, HSSFRow row,
+      List<ExcelCellMeta> metaList) {
     String[] titleList = new String[colNum];
     for (int i = 0; i < colNum; i++) {
       String temp = row.getCell(i).getStringCellValue();

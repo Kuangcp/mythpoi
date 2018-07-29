@@ -2,12 +2,12 @@ package com.kuangcp.mythpoi.utils.base;
 
 import com.kuangcp.mythpoi.excel.ExcelCellMeta;
 import com.kuangcp.mythpoi.excel.base.ExcelTransform;
-
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by https://github.com/kuangcp on 18-2-22  下午4:14
@@ -18,22 +18,33 @@ import java.util.List;
 public class ReadAnnotationUtil {
 
   /**
-   * 获取类上注解, 得到Sheet的标题
+   * 获取类上注解, 得到Sheet的导出标题
    *
    * @param target 目标类
-   * @param export true/false 导出标题/导入标题
    * @return String 标题
    */
-  public static String getSheetTitle(Class<? extends ExcelTransform> target, boolean export) {
+  public static String getSheetExportTitle(Class<? extends ExcelTransform> target) {
     ExcelSheet excelSheet = target.getAnnotation(ExcelSheet.class);
-    if (excelSheet == null) {
+    if (Objects.isNull(excelSheet)) {
       return " ";
     }
-    if (export) {
-      return excelSheet.exportTitle();
+    return excelSheet.exportTitle();
+  }
+
+  /**
+   * 获取类上注解, 得到Sheet的导入标题
+   *
+   * @param target 目标类
+   * @return String 标题
+   */
+  public static String getSheetImportTitle(Class<? extends ExcelTransform> target) {
+    ExcelSheet excelSheet = target.getAnnotation(ExcelSheet.class);
+    if (Objects.isNull(excelSheet)) {
+      return " ";
     }
     return excelSheet.importTitle();
   }
+
 
   /**
    * 将原始对象集合转化成二维数据
@@ -51,7 +62,7 @@ public class ReadAnnotationUtil {
    * 获取具有注解的属性,封装成list, 也就是Excel的标题行
    */
   public static List<ExcelCellMeta> getCellMetaData(Class target) {
-    List<ExcelCellMeta> list = new ArrayList<>(0);
+    List<ExcelCellMeta> list = new ArrayList<>();
     final Field[] fields = target.getDeclaredFields();
     for (Field field : fields) {
       if (field.isAnnotationPresent(ExcelConfig.class)) {
@@ -70,7 +81,7 @@ public class ReadAnnotationUtil {
     if (metaData.size() == 0) {
       return null;
     }
-    List<Object[]> dataList = new ArrayList<>(0);
+    List<Object[]> dataList = new ArrayList<>();
     for (ExcelTransform model : originData) {
       Object[] line = new Object[metaData.size()];
       int index = 0;

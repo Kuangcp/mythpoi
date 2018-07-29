@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class ExcelExportTest {
 
-  private List<Employee> originList = new ArrayList<>(0);
+  private List<Employee> originList = new ArrayList<>();
 
   @Before
   public void init() {
@@ -32,7 +32,7 @@ public class ExcelExportTest {
     e1.setEmail("email");
     e1.setBirth(new Date());
     e1.setDeath(true);
-//        e1.setAge(1212);
+    e1.setAge(1212);
     e1.setScore(12.1);
     e1.setDeath(false);
 
@@ -52,6 +52,9 @@ public class ExcelExportTest {
     e3.setBirth(new Date());
     e3.setDeath(false);
 
+    e1.setEmail("[{\"names\":\"Name1\",\"sex\":\"sex1\",\"age\":1212,\"birth\":1532793600000,\"death\":false,\"score\":12.1,\"phone\":\"Phone1\",\"email\":\"\",\"qq\":\"QQ1\"}]");
+    e2.setEmail("[{\"names\":\"Name1\",\"sex\":\"sex1\",\"age\":1212,\"birth\":1532793600000,\"death\":false,\"score\":12.1,\"phone\":\"Phone1\",\"email\":\"\",\"qq\":\"QQ1\"}]");
+    e3.setEmail("[{\"names\":\"Name1\",\"sex\":\"sex1\",\"age\":1212,\"birth\":1532793600000,\"death\":false,\"score\":12.1,\"phone\":\"Phone1\",\"email\":\"\",\"qq\":\"QQ1\"}]");
     originList.add(e1);
     originList.add(e2);
     originList.add(e3);

@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExcelSheet {
 
-  String exportTitle() default "";
+  String exportTitle() default " ";
 
-  String importTitle() default "";
+  String importTitle() default " ";
 }

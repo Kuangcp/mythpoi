@@ -6,9 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by https://github.com/kuangcp on 18-2-22  下午3:27 <br>
- * Excel配置注解, 用于Excel的导入导出<br>
- * name  实体的属性对应的列标题
+ * Created by https://github.com/kuangcp on 18-2-22  下午3:27
+ * Excel配置注解, 用于Excel的导入导出
  *
  * @author kuangcp
  */
@@ -16,9 +15,14 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface ExcelConfig {
 
-  // 是否需要导出, 默认是导出true
+  /**
+   * 是否需要导出, 默认是导出true
+   */
   boolean exportFlag() default true;
 
-  // 列标题
+
+  /**
+   * 列标题
+   */
   String value() default "";
 }

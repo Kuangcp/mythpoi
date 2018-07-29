@@ -13,7 +13,7 @@ import java.io.IOException;
 
 /**
  * Created by https://github.com/kuangcp
- *
+ * 测试 使用 Jackson 的yml处理
  * @author kuangcp
  */
 
@@ -28,7 +28,7 @@ public class JacksonYamlTest {
     MainConfig config = MainConfig.getInstance();
     config.setContentStartNum(11);
     config.setStartColNum(1);
-    config.setTitleTotalNum(3);
+    config.setTitleLastRowNum(3);
     config.setStartRowNum(1);
     // 保存到文件中
     factory.setCodec(mapper);

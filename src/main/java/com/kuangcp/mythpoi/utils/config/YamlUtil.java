@@ -8,6 +8,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by https://github.com/kuangcp on 18-2-27  下午3:37
@@ -15,6 +16,7 @@ import java.io.IOException;
  *
  * @author kuangcp
  */
+@Slf4j
 public class YamlUtil {
 
   private static YAMLFactory factory = new YAMLFactory();
@@ -37,7 +39,7 @@ public class YamlUtil {
       generator.writeObject(object);
       return true;
     } catch (IOException e) {
-      e.printStackTrace();
+      log.error("create file error", e);
       return false;
     }
   }
@@ -56,6 +58,7 @@ public class YamlUtil {
       return mapper.readValue(new File(filePath), target);
     } catch (Exception e) {
       e.printStackTrace();
+      log.error("read file error", e);
       return null;
     }
   }

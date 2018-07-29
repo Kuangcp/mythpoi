@@ -2,17 +2,15 @@ package com.kuangcp.mythpoi.excel;
 
 import com.kuangcp.mythpoi.excel.base.ExcelTransform;
 import com.kuangcp.mythpoi.excel.base.MainConfig;
-import com.kuangcp.mythpoi.excel.type.*;
+import com.kuangcp.mythpoi.excel.type.BooleanHandler;
+import com.kuangcp.mythpoi.excel.type.DateHandler;
+import com.kuangcp.mythpoi.excel.type.DoubleHandler;
+import com.kuangcp.mythpoi.excel.type.FloatHandler;
+import com.kuangcp.mythpoi.excel.type.IntegerHandler;
+import com.kuangcp.mythpoi.excel.type.LoadCellValue;
+import com.kuangcp.mythpoi.excel.type.LongHandler;
+import com.kuangcp.mythpoi.excel.type.StringHandler;
 import com.kuangcp.mythpoi.utils.base.ReadAnnotationUtil;
-import java.util.Objects;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.util.CellRangeAddress;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -20,6 +18,20 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.util.CellRangeAddress;
 
 /**
  * Created by https://github.com/kuangcp on 18-2-21  下午12:47
@@ -54,6 +66,10 @@ public class ExcelExport {
    * @param originData 主要数据
    */
   public static boolean exportExcel(String filePath, List<? extends ExcelTransform> originData) {
+    if (Objects.isNull(originData) || originData.isEmpty()) {
+      log.warn("export data is empty");
+      return false;
+    }
     try {
       File file = new File(filePath);
       OutputStream out = new FileOutputStream(file);
@@ -66,16 +82,14 @@ public class ExcelExport {
 
   /**
    * @param outputStream 输出流
-   * @param originData 原始对象集合
+   * @param originData 原始对象集合 不为空
    */
   public static boolean exportExcel(OutputStream outputStream,
       List<? extends ExcelTransform> originData) {
+
     try {
-      if (Objects.isNull(originData) || originData.isEmpty()) {
-        return false;
-      }
       Class<? extends ExcelTransform> target = originData.get(0).getClass();
-      String sheetTitle = ReadAnnotationUtil.getSheetTitle(target, true);
+      String sheetTitle = ReadAnnotationUtil.getSheetExportTitle(target);
       List<Object[]> dataList = ReadAnnotationUtil.getContentByList(target, originData);
 
       if (Objects.isNull(dataList)) {
@@ -84,14 +98,15 @@ public class ExcelExport {
       }
 
       HSSFSheet sheet = workbook.createSheet(sheetTitle);
-      HSSFCellStyle columnTopStyle = getColumnTopStyle(workbook);
+      HSSFCellStyle columnTitleStyle = getColumnTitleCellStyle(workbook);
 
-      setSheetTitle(sheet, dataList, sheetTitle, columnTopStyle);
-      setColumnTitle(dataList, sheet, target, columnTopStyle);
+      setSheetTitle(sheet, dataList, sheetTitle, columnTitleStyle);
+      setColumnTitle(dataList, sheet, target, columnTitleStyle);
       setContent(dataList, sheet);
       workbook.write(outputStream);
     } catch (Exception e) {
       log.error("export error ", e);
+      return false;
     }
     return true;
   }
@@ -102,8 +117,8 @@ public class ExcelExport {
   private static void setColumnTitle(List<Object[]> dataList, HSSFSheet sheet, Class target,
       HSSFCellStyle columnTopStyle) {
     List<ExcelCellMeta> metaList = ReadAnnotationUtil.getCellMetaData(target);
-    HSSFRow row = sheet.createRow(mainConfig.getTitleTotalNum());
-    int columnNum = dataList.get(mainConfig.getStartRowNum()).length;
+    HSSFRow row = sheet.createRow(mainConfig.getTitleLastRowNum());
+    int columnNum = dataList.get(0).length;
     for (int n = 0; n < columnNum; n++) {
       //创建列头对应个数的单元格
       HSSFCell cellRowName = row.createCell(n);
@@ -120,7 +135,7 @@ public class ExcelExport {
    * 根据List来创造出一行的cell, 使用策略模式是因为要从多种的对象类型转换成Excel的特定类型
    */
   private static void createRowCell(Object[] obj, int index, HSSFRow row) {
-    HSSFCellStyle style = getStyle(workbook);
+    HSSFCellStyle style = getContentCellStyle(workbook);
     Object temp = obj[index];
     HSSFCell cell = handlerMap.get(temp.getClass().getSimpleName()).loadValue(row, index, temp);
 
@@ -147,26 +162,37 @@ public class ExcelExport {
    * 设置表格标题行 合并单元格 并 居中
    */
   private static void setSheetTitle(HSSFSheet sheet, List<Object[]> dataList, String sheetTitle,
-      HSSFCellStyle columnTopStyle) {
+      HSSFCellStyle columnTitleStyle) {
 
-    HSSFRow row = sheet.createRow(mainConfig.getStartColNum());
+    HSSFRow row = sheet.createRow(mainConfig.getStartRowNum());
     HSSFCell cellTitle = row.createCell(mainConfig.getStartColNum());
-    sheet.addMergedRegion(new CellRangeAddress(mainConfig.getStartRowNum(),
-        mainConfig.getTitleTotalNum() - 1,
-        mainConfig.getStartColNum(), dataList.get(0).length - 1));
 
-    cellTitle.setCellStyle(columnTopStyle);
+    int lastColNum = dataList.get(0).length - 1;
+    log.debug("title cell range : firstRow={} lastRow={} firstCol={} lastCol={}",
+        mainConfig.getStartRowNum(),
+        mainConfig.getTitleLastRowNum() - 1,
+        mainConfig.getStartColNum(),
+        lastColNum);
+
+    sheet.addMergedRegion(new CellRangeAddress(
+        mainConfig.getStartRowNum(),
+        mainConfig.getTitleLastRowNum() - 1,
+        mainConfig.getStartColNum(),
+        lastColNum));
+
+    log.debug("title value position: cell ={}", cellTitle.getAddress().toString());
+    cellTitle.setCellStyle(columnTitleStyle);
     cellTitle.setCellValue(sheetTitle);
   }
 
   /**
    * 列头单元格样式
    */
-  private static HSSFCellStyle getColumnTopStyle(HSSFWorkbook workbook) {
+  private static HSSFCellStyle getColumnTitleCellStyle(HSSFWorkbook workbook) {
     HSSFFont font = workbook.createFont();
-    font.setFontHeightInPoints((short) 12);
-    font.setBold(true);
-    font.setFontName("Courier New");
+    font.setFontHeightInPoints(mainConfig.getTitleFontSize());
+    font.setBold(mainConfig.isTitleFontBold());
+    font.setFontName(mainConfig.getTitleFontName());
 
     HSSFCellStyle style = workbook.createCellStyle();
     style.setBorderBottom(BorderStyle.MEDIUM);
@@ -186,11 +212,12 @@ public class ExcelExport {
   /**
    * 列数据信息单元格样式
    */
-  private static HSSFCellStyle getStyle(HSSFWorkbook workbook) {
+  private static HSSFCellStyle getContentCellStyle(HSSFWorkbook workbook) {
     // 设置字体
     HSSFFont font = workbook.createFont();
-    font.setFontHeightInPoints((short) 10);
-    font.setFontName("Arial");
+    font.setFontHeightInPoints(mainConfig.getContentFontSize());
+    font.setFontName(mainConfig.getContentFontName());
+    font.setBold(mainConfig.isContentFontBold());
 
     HSSFCellStyle style = workbook.createCellStyle();
     // 设置边框风格和颜色

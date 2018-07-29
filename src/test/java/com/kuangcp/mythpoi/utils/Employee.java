@@ -8,7 +8,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-//@ExcelSheet(exportTitle = "雇员表", importTitle = "雇员表")
+@ExcelSheet(exportTitle = "雇员表", importTitle = "雇员表")
 public class Employee implements ExcelTransform {
 
   @ExcelConfig("姓名")
@@ -32,6 +32,7 @@ public class Employee implements ExcelTransform {
   @ExcelConfig("QQ号码")
   private String QQ;
 
-  private String email;
+  @ExcelConfig("邮箱")
+  private String email = "";
 
 }

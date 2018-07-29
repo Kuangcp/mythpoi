@@ -20,9 +20,7 @@ public class YamlUtilTest {
   @Test
   public void testCreateFile() throws Exception {
     MainConfig config = MainConfig.getInstance();
-    config.setContentStartNum(11);
-    config.setStartColNum(1);
-    config.setTitleTotalNum(3);
+    config.setContentStartNum(5);
     System.out.println(path);
     boolean result = YamlUtil.createFile(config, path);
     Assert.assertTrue(result);
