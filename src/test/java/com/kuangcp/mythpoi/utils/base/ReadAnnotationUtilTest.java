@@ -3,6 +3,7 @@ package com.kuangcp.mythpoi.utils.base;
 import com.kuangcp.mythpoi.utils.Employee;
 import java.lang.reflect.Field;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -36,9 +37,10 @@ public class ReadAnnotationUtilTest {
     originList.add(e1);
     originList.add(e2);
     List<Object[]> result = ReadAnnotationUtil.getContentByList(Employee.class, originList);
+    Assert.assertEquals(2, result.size());
     for (Object[] temp : result) {
       for (Object n : temp) {
-        System.out.print(n);
+        System.out.print(n + " ");
       }
       System.out.println();
     }
@@ -57,6 +59,7 @@ public class ReadAnnotationUtilTest {
 //            System.out.println(method.toString());
 //        }
     final Field[] fields = cls.getDeclaredFields();
+    Assert.assertNotNull(fields);
     for (Field field : fields) {
       if (field.isAnnotationPresent(ExcelConfig.class)) {
         System.out.print("具有注解  ");

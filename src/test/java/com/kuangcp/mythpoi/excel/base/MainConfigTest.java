@@ -1,5 +1,6 @@
 package com.kuangcp.mythpoi.excel.base;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -16,7 +17,7 @@ public class MainConfigTest {
   public void testRead() {
     MainConfig instance = MainConfig.getInstance();
 
-    assert (instance != null);
+    Assert.assertNotNull(instance);
 
     System.out.println(instance.toString());
   }

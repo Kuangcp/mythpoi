@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -14,7 +15,6 @@ import org.junit.Test;
  * Created by https://github.com/kuangcp on 18-2-23  下午9:54
  *
  * @author kuangcp
- *
  */
 @Ignore
 @Slf4j
@@ -23,6 +23,9 @@ public class ExcelImportTest {
   @Test
   public void testImportExcel() {
     List<Employee> result = ExcelImport.importExcel("/home/kcp/test/employee.xls", Employee.class);
+
+    Assert.assertNotNull(result);
+
     result.forEach(item -> System.out.println(item.toString()));
 
     ObjectMapper mapper = new ObjectMapper();
@@ -39,9 +42,10 @@ public class ExcelImportTest {
   public void testStreamImport() throws FileNotFoundException {
     FileInputStream inputStream = new FileInputStream("/home/kcp/test/employee.xls");
     List<Employee> result = ExcelImport.importExcel(inputStream, Employee.class);
-    result.forEach(item -> {
-      System.out.println(item.toString());
-    });
+
+    Assert.assertNotNull(result);
+
+    result.forEach(item -> System.out.println(item.toString()));
   }
 
 

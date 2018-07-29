@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.kuangcp.mythpoi.excel.base.MainConfig;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
@@ -14,6 +15,7 @@ import java.io.IOException;
 /**
  * Created by https://github.com/kuangcp
  * 测试 使用 Jackson 的yml处理
+ *
  * @author kuangcp
  */
 
@@ -39,6 +41,7 @@ public class JacksonYamlTest {
     // 输出
     String result = mapper.writeValueAsString(config);
     System.out.println(result);
+    Assert.assertNotNull(result);
   }
 
   @Test
@@ -46,6 +49,9 @@ public class JacksonYamlTest {
     ObjectMapper mapper = new ObjectMapper(factory);
     try {
       MainConfig user = mapper.readValue(new File("/home/kcp/test/user.yml"), MainConfig.class);
+
+      Assert.assertNotNull(user);
+      
       System.out.println(user.toString());
     } catch (Exception e) {
       e.printStackTrace();
