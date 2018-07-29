@@ -40,11 +40,11 @@ public class MainConfig {
   private String dateFormat = "yyyy/MM/dd";
 
   private short titleFontSize = 12;
-  private String titleFontName="Courier New";
+  private String titleFontName = "Courier New";
   private boolean isTitleFontBold = true;
 
   private short contentFontSize = 10;
-  private String contentFontName="Arial";
+  private String contentFontName = "Arial";
   private boolean isContentFontBold = false;
 
 
@@ -72,23 +72,25 @@ public class MainConfig {
         }
       }
     }
-    try {
-      checkConfig(mainConfig);
-    } catch (RuntimeException e) {
-      log.error(e.getMessage(), e);
-      System.exit(1);
-    }
-    return mainConfig;
+    return checkConfig(mainConfig);
   }
 
   private MainConfig() {
   }
 
-  private static void checkConfig(MainConfig config) throws RuntimeException {
+  /**
+   * 目前是校验通不过就返回空, 导致后面的逻辑报出 NPE, 不知道还有什么更好的方式
+   */
+  private static MainConfig checkConfig(MainConfig config) {
 
-    if (config.getTitleLastRowNum() < config.getStartRowNum() + 2) {
-      throw new RuntimeException("titleLastRowNum must more than startRowNum of 2");
+    if(config.getContentStartNum() <= config.getTitleLastRowNum()){
+      log.error("contentStartNum must more than titleLastRowNum");
+      return null;
     }
-
+    if (config.getTitleLastRowNum() < config.getStartRowNum() + 2) {
+      log.error("titleLastRowNum must more than startRowNum of 2");
+      return null;
+    }
+    return config;
   }
 }

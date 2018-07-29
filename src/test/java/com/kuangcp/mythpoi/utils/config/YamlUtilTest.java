@@ -30,7 +30,7 @@ public class YamlUtilTest {
   @Test
   public void testRead() {
     MainConfig con = YamlUtil.readFile(MainConfig.class, path);
-    assert con != null;
+    assert(con != null);
     System.out.println(con.toString());
   }
 }

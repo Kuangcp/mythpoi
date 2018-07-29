@@ -1,10 +1,9 @@
 package com.kuangcp.mythpoi.excel;
 
-import com.kuangcp.mythpoi.utils.Employee;
-import com.kuangcp.mythpoi.utils.base.ReadAnnotationUtil;
-import org.junit.Before;
-import org.junit.Test;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertThat;
 
+import com.kuangcp.mythpoi.utils.Employee;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,6 +11,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Created by https://github.com/kuangcp on 18-2-21  下午10:10
@@ -52,9 +53,12 @@ public class ExcelExportTest {
     e3.setBirth(new Date());
     e3.setDeath(false);
 
-    e1.setEmail("[{\"names\":\"Name1\",\"sex\":\"sex1\",\"age\":1212,\"birth\":1532793600000,\"death\":false,\"score\":12.1,\"phone\":\"Phone1\",\"email\":\"\",\"qq\":\"QQ1\"}]");
-    e2.setEmail("[{\"names\":\"Name1\",\"sex\":\"sex1\",\"age\":1212,\"birth\":1532793600000,\"death\":false,\"score\":12.1,\"phone\":\"Phone1\",\"email\":\"\",\"qq\":\"QQ1\"}]");
-    e3.setEmail("[{\"names\":\"Name1\",\"sex\":\"sex1\",\"age\":1212,\"birth\":1532793600000,\"death\":false,\"score\":12.1,\"phone\":\"Phone1\",\"email\":\"\",\"qq\":\"QQ1\"}]");
+    e1.setEmail(
+        "[{\"names\":\"Name1\",\"sex\":\"sex1\",\"age\":1212,\"birth\":1532793600000,\"death\":false,\"score\":12.1,\"phone\":\"Phone1\",\"email\":\"\",\"qq\":\"QQ1\"}]");
+    e2.setEmail(
+        "[{\"names\":\"Name1\",\"sex\":\"sex1\",\"age\":1212,\"birth\":1532793600000,\"death\":false,\"score\":12.1,\"phone\":\"Phone1\",\"email\":\"\",\"qq\":\"QQ1\"}]");
+    e3.setEmail(
+        "[{\"names\":\"Name1\",\"sex\":\"sex1\",\"age\":1212,\"birth\":1532793600000,\"death\":false,\"score\":12.1,\"phone\":\"Phone1\",\"email\":\"\",\"qq\":\"QQ1\"}]");
     originList.add(e1);
     originList.add(e2);
     originList.add(e3);
@@ -63,7 +67,7 @@ public class ExcelExportTest {
   @Test
   public void testExports() {
     boolean results = ExcelExport.exportExcel("/home/kcp/test/employee.xls", originList);
-    assert results;
+    assertThat(results, equalTo(true));
   }
 
   @Test
@@ -75,18 +79,8 @@ public class ExcelExportTest {
     } catch (FileNotFoundException e11) {
       e11.printStackTrace();
     }
-    ExcelExport.exportExcel(out, originList);
-  }
-
-  @Test
-  public void testGetContentByList() throws Exception {
-    List<Object[]> result = ReadAnnotationUtil.getContentByList(Employee.class, originList);
-    for (Object[] temp : result) {
-      for (Object l : temp) {
-        System.out.print(l.toString());
-      }
-      System.out.println();
-    }
+    boolean results = ExcelExport.exportExcel(out, originList);
+    assertThat(results, equalTo(true));
   }
 
 }

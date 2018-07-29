@@ -14,6 +14,10 @@ public class MainConfigTest {
    */
   @Test
   public void testRead() {
-    System.out.println(MainConfig.getInstance().toString());
+    MainConfig instance = MainConfig.getInstance();
+
+    assert (instance != null);
+
+    System.out.println(instance.toString());
   }
 }

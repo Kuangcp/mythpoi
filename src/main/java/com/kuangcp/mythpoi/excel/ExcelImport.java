@@ -10,13 +10,13 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.ss.usermodel.Sheet;
 
 /**
  * Created by https://github.com/kuangcp on 18-2-23  下午9:52
@@ -103,12 +103,12 @@ public class ExcelImport {
     return readExcelSheetContent(sheetNum, target);
   }
 
-  /**
-   * TODO 根据标题一一对应,读取多sheet
-   */
-  private static void readTitle(Sheet sheet) {
-
-  }
+//  /**
+//   * TODO 根据标题一一对应,读取多sheet
+//   */
+//  private static void readTitle(Sheet sheet) {
+//
+//  }
 
   /**
    * 根据sheetNum读取数据
@@ -119,6 +119,10 @@ public class ExcelImport {
   private static <T extends ExcelTransform> List<T> readExcelSheetContent(int sheetNum,
       Class<T> target) {
     List<T> result = new ArrayList<>();
+
+    if (Objects.isNull(mainConfig)) {
+      return result;
+    }
     List<ExcelCellMeta> metaList = ReadAnnotationUtil.getCellMetaData(target);
     HSSFSheet sheet = wb.getSheetAt(sheetNum);
     int rowNum = sheet.getLastRowNum();

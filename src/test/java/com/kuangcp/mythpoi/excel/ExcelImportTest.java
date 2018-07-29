@@ -23,10 +23,7 @@ public class ExcelImportTest {
   @Test
   public void testImportExcel() {
     List<Employee> result = ExcelImport.importExcel("/home/kcp/test/employee.xls", Employee.class);
-    result.forEach(item -> {
-      System.out.println(item.toString());
-
-    });
+    result.forEach(item -> System.out.println(item.toString()));
 
     ObjectMapper mapper = new ObjectMapper();
     try {

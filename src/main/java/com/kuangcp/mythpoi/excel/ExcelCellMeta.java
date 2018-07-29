@@ -18,9 +18,9 @@ public class ExcelCellMeta {
   /**
    * 对象的属性对象
    */
-  Field field;
+  private Field field;
   /**
    * 对象的标题名
    */
-  String title;
+  private String title;
 }
