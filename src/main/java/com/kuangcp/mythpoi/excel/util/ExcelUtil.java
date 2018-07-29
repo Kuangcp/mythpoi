@@ -40,41 +40,43 @@ public class ExcelUtil {
 
   /**
    * 根据 cell 装载值 到目标对象上
+   *
    * @param type 类型
    * @param colField 列类型
    * @param target 目标对
    * @param cell 单元格对象
-   * @throws IllegalAccessException
-   * @throws ParseException
    */
   public static void loadCellValue(CellType type, Field colField, Object target, HSSFCell cell)
       throws IllegalAccessException, ParseException {
     String fieldType = colField.getType().getSimpleName();
-    if (CellType.STRING.equals(type)) {
-      if (Date.class.getSimpleName().equals(fieldType)) {
-        colField.set(target, DateUtil.parse(cell.getStringCellValue()));
-      } else {
-        colField.set(target, cell.getStringCellValue());
-      }
-    }
 
-    if (CellType.NUMERIC.equals(type)) {
-      if (Integer.class.getSimpleName().equals(fieldType) || int.class.getSimpleName()
-          .equals(fieldType)) {
-        colField.set(target, (int) cell.getNumericCellValue());
-      } else if (Long.class.getSimpleName().equals(fieldType) || long.class.getSimpleName()
-          .equals(fieldType)) {
-        colField.set(target, (long) cell.getNumericCellValue());
-      } else {
+    switch (type) {
+      case NUMERIC:
+        if (Integer.class.getSimpleName().equals(fieldType) || int.class.getSimpleName()
+            .equals(fieldType)) {
+          colField.set(target, (int) cell.getNumericCellValue());
+          break;
+        }
+        if (Long.class.getSimpleName().equals(fieldType) || long.class.getSimpleName()
+            .equals(fieldType)) {
+          colField.set(target, (long) cell.getNumericCellValue());
+          break;
+        }
         colField.set(target, cell.getNumericCellValue());
-      }
-    }
-    if (CellType.BOOLEAN.equals(type)) {
-      colField.set(target, cell.getBooleanCellValue());
-    }
-
-    if (CellType.BLANK.equals(type)) {
-      colField.set(target, "");
+        break;
+      case STRING:
+        if (Date.class.getSimpleName().equals(fieldType)) {
+          colField.set(target, DateUtil.parse(cell.getStringCellValue()));
+        } else {
+          colField.set(target, cell.getStringCellValue());
+        }
+        break;
+      case BOOLEAN:
+        colField.set(target, cell.getBooleanCellValue());
+        break;
+      case BLANK:
+        colField.set(target, "");
+        break;
     }
   }
 }

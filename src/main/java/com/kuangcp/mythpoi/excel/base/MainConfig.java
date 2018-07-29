@@ -58,18 +58,14 @@ public class MainConfig {
    */
   public static MainConfig getInstance() throws RuntimeException {
     if (mainConfig == null) {
-      synchronized (MainConfig.class) {
-        if (mainConfig == null) {
-          ClassLoader classLoader = MainConfig.class.getClassLoader();
-          URL resource = classLoader.getResource(ExternalConfig.EXCEL_DATA_FORMAT_CONFIG);
-          if (!Objects.isNull(resource)) {
-            String path = resource.getPath();
-            mainConfig = YamlUtil.readFile(MainConfig.class, path);
-          }
-          if (mainConfig == null) {
-            mainConfig = new MainConfig();
-          }
-        }
+      ClassLoader classLoader = MainConfig.class.getClassLoader();
+      URL resource = classLoader.getResource(ExternalConfig.EXCEL_DATA_FORMAT_CONFIG);
+      if (!Objects.isNull(resource)) {
+        String path = resource.getPath();
+        mainConfig = YamlUtil.readFile(MainConfig.class, path);
+      }
+      if (mainConfig == null) {
+        mainConfig = new MainConfig();
       }
     }
     return checkConfig(mainConfig);
@@ -83,7 +79,7 @@ public class MainConfig {
    */
   private static MainConfig checkConfig(MainConfig config) {
 
-    if(config.getContentStartNum() <= config.getTitleLastRowNum()){
+    if (config.getContentStartNum() <= config.getTitleLastRowNum()) {
       log.error("contentStartNum must more than titleLastRowNum");
       return null;
     }

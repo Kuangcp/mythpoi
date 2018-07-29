@@ -135,24 +135,30 @@ public class ExcelImport {
 
     try {
       for (int j = mainConfig.getContentStartNum(); j <= rowNum; j++) {
-        row = sheet.getRow(j);
-        T cellValue = target.newInstance();
-        for (int i = 0; i < colNum; i++) {
-          Field colField = ExcelUtil.getColFieldByTitle(metaList, titleList[i]);
-          colField.setAccessible(true);
-          HSSFCell cell = row.getCell(i);
-          try {
-            ExcelUtil.loadCellValue(cell.getCellTypeEnum(), colField, cellValue, cell);
-          } catch (Exception e) {
-            log.error("load cell value error", e);
-          }
-        }
+        T cellValue = readRow(sheet.getRow(j), colNum, target, titleList);
         result.add(cellValue);
       }
     } catch (InstantiationException | IllegalAccessException e) {
       log.error("read excel error", e);
     }
     return result;
+  }
+
+  private static <T extends ExcelTransform> T readRow(HSSFRow row, int colNum,
+      Class<T> target, String[] titleList) throws IllegalAccessException, InstantiationException {
+    T cellValue = target.newInstance();
+    List<ExcelCellMeta> metaList = ReadAnnotationUtil.getCellMetaData(target);
+    for (int i = 0; i < colNum; i++) {
+      Field colField = ExcelUtil.getColFieldByTitle(metaList, titleList[i]);
+      colField.setAccessible(true);
+      HSSFCell cell = row.getCell(i);
+      try {
+        ExcelUtil.loadCellValue(cell.getCellTypeEnum(), colField, cellValue, cell);
+      } catch (Exception e) {
+        log.error("load cell value error", e);
+      }
+    }
+    return cellValue;
   }
 
   /**
