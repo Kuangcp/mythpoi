@@ -3,6 +3,7 @@ package com.kuangcp.mythpoi.excel.base;
 import com.kuangcp.mythpoi.config.ExternalConfig;
 import com.kuangcp.mythpoi.utils.config.YamlUtil;
 import java.net.URL;
+import java.util.Objects;
 import lombok.Data;
 
 /**
@@ -32,13 +33,9 @@ public class MainConfig {
     if (mainConfig == null) {
       synchronized (MainConfig.class) {
         if (mainConfig == null) {
-          // TODO 打包成jar别的项目引用就不会有问题,这里运行就会有问题,src前要加上项目名,估计是idea的问题
-//            mainConfig = YamlUtil.readFile(MainConfig.class, "src/main/resources/excel.main.yml");
-
-          // TODO 测试该方式
           ClassLoader classLoader = MainConfig.class.getClassLoader();
           URL resource = classLoader.getResource(ExternalConfig.EXCEL_DATA_FORMAT_CONFIG);
-          if (resource != null) {
+          if (!Objects.isNull(resource)) {
             String path = resource.getPath();
             mainConfig = YamlUtil.readFile(MainConfig.class, path);
           }

@@ -33,7 +33,7 @@ public class JacksonYamlTest {
     // 保存到文件中
     factory.setCodec(mapper);
     YAMLGenerator generator = factory
-        .createGenerator(new FileOutputStream("/home/kcp/test/user.yml"), JsonEncoding.UTF8);
+        .createGenerator(new FileOutputStream("user.yml"), JsonEncoding.UTF8);
     generator.useDefaultPrettyPrinter();
     generator.writeObject(config);
     // 输出

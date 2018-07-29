@@ -1,5 +1,6 @@
---- !com.kuangcp.mythpoi.excel.base.MainConfig
-contentStartNum: 11
+---
 startColNum: 1
 startRowNum: 1
 titleTotalNum: 3
+contentStartNum: 11
+dateFormat: "yyyy/MM/dd"

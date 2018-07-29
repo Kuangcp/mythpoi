@@ -9,6 +9,9 @@ import org.junit.Test;
  */
 public class MainConfigTest {
 
+  /**
+   * 测试 读物 yml 文件, 实例化 MainConfig
+   */
   @Test
   public void testRead() {
     System.out.println(MainConfig.getInstance().toString());

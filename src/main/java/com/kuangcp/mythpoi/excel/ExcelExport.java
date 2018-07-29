@@ -85,6 +85,7 @@ public class ExcelExport {
 
       HSSFSheet sheet = workbook.createSheet(sheetTitle);
       HSSFCellStyle columnTopStyle = getColumnTopStyle(workbook);
+
       setSheetTitle(sheet, dataList, sheetTitle, columnTopStyle);
       setColumnTitle(dataList, sheet, target, columnTopStyle);
       setContent(dataList, sheet);
@@ -143,7 +144,7 @@ public class ExcelExport {
   }
 
   /**
-   * 设置表格标题行
+   * 设置表格标题行 合并单元格 并 居中
    */
   private static void setSheetTitle(HSSFSheet sheet, List<Object[]> dataList, String sheetTitle,
       HSSFCellStyle columnTopStyle) {

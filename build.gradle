@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'com.github.kuangcp'
-version = '0.2.5-SNAPSHOT'
+version = '0.1.5-SNAPSHOT'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 buildDir = 'out/build'
@@ -21,15 +21,21 @@ repositories {
   }
   mavenCentral()
   jcenter()
+  mavenLocal()
 }
 
+
 dependencies {
-  compile 'org.projectlombok:lombok:1.18.2' // 18.0 will compile error
+  annotationProcessor 'org.projectlombok:lombok:1.18.2'
+  compileOnly 'org.projectlombok:lombok:1.18.2'
+  testAnnotationProcessor 'org.projectlombok:lombok:1.18.2'
+  testCompileOnly 'org.projectlombok:lombok:1.18.2'
+
   compile "org.apache.poi:poi:3.17"
   compile 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
   compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.5'
 
-//    compile "com.github.kuangcp:JavaToolKit:1.1.1-SNAPSHOT"
+  compile "com.github.kuangcp:JavaToolKit:0.0.4-SNAPSHOT"
 
   compile 'ch.qos.logback:logback-classic:1.2.3'
 
@@ -37,4 +43,6 @@ dependencies {
 }
 
 
-
+test {
+  failFast = true
+}

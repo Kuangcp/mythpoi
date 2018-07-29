@@ -1,6 +1,7 @@
 package com.kuangcp.mythpoi.utils.base;
 
 import com.kuangcp.mythpoi.utils.Employee;
+import java.lang.reflect.Field;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -41,5 +42,37 @@ public class ReadAnnotationUtilTest {
       }
       System.out.println();
     }
+  }
+
+  /**
+   * 测试读取注解信息
+   * 注意: 注解在什么对象上就拿到该对应对象调用 isAnnotationPresent 方法即可判断是否有对应注解存在
+   */
+  @Test
+  public void readConfig() throws ClassNotFoundException {
+    final Class cls = Class.forName("com.kuangcp.mythpoi.utils.Employee");
+
+//        final Method[] methodList = cls.getMethods();
+//        for(Method method : methodList){
+//            System.out.println(method.toString());
+//        }
+    final Field[] fields = cls.getDeclaredFields();
+    for (Field field : fields) {
+      if (field.isAnnotationPresent(ExcelConfig.class)) {
+        System.out.print("具有注解  ");
+        ExcelConfig excelConfig = field.getAnnotation(ExcelConfig.class);
+        System.out.print(excelConfig.value());
+      }
+      System.out.println(field.getName());
+    }
+
+    // 判断是否有指定注解类型的注解
+//        if (cls.isAnnotationPresent(MainConfig.class)) {
+//            // 根据注解类型返回指定类型的注解
+//            MainConfig des = (MainConfig) cls.getAnnotation(MainConfig.class);
+//            System.out.println("注解描述:" + des.name());
+//        }else{
+//            System.out.println("没有?");
+//        }
   }
 }
