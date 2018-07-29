@@ -29,8 +29,8 @@ public class YamlUtilTest {
   // 测试读取配置文件
   @Test
   public void testRead() {
-    MainConfig con = YamlUtil.readFile(MainConfig.class, path);
-    assert(con != null);
-    System.out.println(con.toString());
+    MainConfig mainConfig = YamlUtil.readFile(MainConfig.class, path);
+    Assert.assertNotNull(mainConfig);
+    System.out.println(mainConfig.toString());
   }
 }

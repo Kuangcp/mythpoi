@@ -51,7 +51,7 @@ public class JacksonYamlTest {
       MainConfig user = mapper.readValue(new File("/home/kcp/test/user.yml"), MainConfig.class);
 
       Assert.assertNotNull(user);
-      
+
       System.out.println(user.toString());
     } catch (Exception e) {
       e.printStackTrace();
